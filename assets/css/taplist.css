@@ -1,0 +1,42 @@
+@media (max-width: 800px) {
+  #taplist ul {
+    width: 100%;
+  }
+}
+@media (min-width: 801px) {
+  #taplist ul {
+    width: 50%;
+  }
+}
+#taplist ul img.dash-handpull {
+  position: relative;
+  right: 15%;
+  float: right;
+}
+#taplist ul li {
+  /* Reset everything to 0 for now */
+  list-style: none;
+  margin: 0;
+  padding: 10px 0px 10px 80px;
+  background-repeat: no-repeat;
+  font-size: 12px;
+  /* Try to work around spliiting inside an element in columnar mode */
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+  -o-column-break-inside: avoid;
+  break-inside: avoid-column;
+  page-break-inside: avoid;
+}
+#taplist ul li.serving {
+  background-image: url(../images/serving.png);
+}
+#taplist ul li.low {
+  background-image: url(../images/low.png);
+}
+#taplist ul li.next {
+  background-image: url(../images/next.png);
+}
+#taplist ul li h2 {
+  font-size: 17px;
+  margin: 0;
+}
