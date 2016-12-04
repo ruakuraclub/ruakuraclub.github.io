@@ -37,6 +37,14 @@ a:active {
   font-weight: bold;
 }
 
+.navbar-toggle:before {
+  content:"Menu";
+  left:-60px;
+  top:6px;
+  position:absolute;
+  width:50px;
+}
+
 #rccCarousel {
   padding-top: 20px;
   height: 170px;
