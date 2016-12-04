@@ -20,7 +20,7 @@ function makeTapList(beers){
 
 var ready = function() {
 
-	$.ajax('http://clubfare.hs.net.nz/api/beers', {
+	$.ajax('https://clubfare.hs.net.nz/api/beers', {
 		success: function (data, textStatus, xhr) {
 			makeTapList(data);
 		}
@@ -28,7 +28,7 @@ var ready = function() {
 
 	var etag = null;
 	setInterval(function () {
-		$.ajax('http://clubfare.hs.net.nz/api/beers', {
+		$.ajax('https://clubfare.hs.net.nz/api/beers', {
 			success: function (data, textStatus, xhr) {
 				if (etag == null) {
 					etag = xhr.getResponseHeader('Etag');
