@@ -8,13 +8,21 @@ function makeTapList(beers){
 	$('#taplist ul').empty();
 	$.each(beers, function(key, beer){
 		element = "";
-		element += '<li class=\"'+locationclass[beer.location.id]+'\">';
+		if (!beer.note.trim()) {
+			element += '<li class=\"'+locationclass[beer.location.id]+'\">';
+		} else {
+			element += '<li class=\"'+locationclass[beer.location.id]+'\" data-toggle="tooltip" title="'+beer.note+'">';
+		}
 		element += '<h2>'+beer.brewer.name+' <em>'+beer.name+'</em></h2>';
 		element += beer.style.name+' &mdash;';
 		element += '<strong>'+beer.abv+'% ABV</strong><br>';
 		element += beer.brewer.location+'<br>';
 		element += '<p></p></li>';
 		$('#taplist ul').append(element);
+	});
+
+	$('[data-toggle="tooltip"]').tooltip({
+		'placement': 'right'
 	});
 }
 

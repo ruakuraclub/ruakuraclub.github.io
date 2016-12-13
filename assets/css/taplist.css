@@ -40,3 +40,6 @@
   font-size: 17px;
   margin: 0;
 }
+div.tooltip-inner {
+  max-width: 350px;
+}
