@@ -70,6 +70,14 @@ a:active {
   border-radius: 6px;
 }
 
+ul#sponsors {
+  list-style-type: none;
+}
+
+ul#affiliates, ul#sponsors {
+  padding-top: 20px;
+}
+
 @media screen and (min-width: 768px) {
   .content {
     padding-right: 60px;
