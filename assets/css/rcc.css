@@ -74,6 +74,10 @@ ul#sponsors {
   list-style-type: none;
 }
 
+ul#sponsors li {
+  padding-bottom: 20px;
+}
+
 ul#affiliates, ul#sponsors {
   padding-top: 20px;
 }
