@@ -70,6 +70,10 @@ a:active {
   border-radius: 6px;
 }
 
+.content img.pull-right {
+  padding-left: 20px;
+}
+
 ul#sponsors {
   list-style-type: none;
 }
