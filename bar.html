@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/rcc_bootstrap.css">
+    <link href="assets/css/taplist.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   </head>
   <body>
@@ -20,17 +21,17 @@
           <li class="nav-item">
             <a class="nav-link" href="./whats_on.html">What's On?</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="./bar.html">Bar & Kitchen</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="./facilities.html">Facilities</a>
           </li>
-          <li class="nav-item dropdown active">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sports</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <a class="dropdown-item" href="./swimming.html">Swimming</a>
-              <a class="dropdown-item active" href="./tennis.html">Tennis</a>
+              <a class="dropdown-item" href="./tennis.html">Tennis</a>
             </div>
           </li>
           <li class="nav-item">
@@ -52,10 +53,9 @@
           <div class="row">
             <div class="col-md-4"><image src="./assets/images/club_logo_small.png" alt="RCC Logo"></image></div>
             <div class="col-md-8">
-              <h2>Ruakura Campus Club Tennis</h2>
-              <p>The RCC maintains 2 asphalt tennis courts for Tennis Club members use. The fees are $20 per year which includes a key. For convenience there is a booking sheet in the Club foyer, for one hour game slots.</p>
-              <p>A few of the Club members organise an Annual Mixed Doubles Tournament, which runs over February and March. It is very popular and well contested so there are a range of grades to cover all levels of play.</p>
-              <p>New players are encouraged to use this tournament to appreciate the fun of playing tennis.</p>
+              <h2>Ruakura Campus Club Bar</h2>
+              <p>Whats on tap at the RCC?</p>
+              <img src="./assets/images/bar.jpg" width="440px" height="150px"></img>
             </div>
           </div>
         </div>
@@ -63,14 +63,30 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <h3>Fees</h3>
-            <p>New Members: $20 (+$15 for a court key)</p>
-            <p>Renewal: $20 (and key exchanged at no cost)</p>
+            <h3>Kitchen</h3>
+            <p>Counter menu is available Friday and other functions.</p>
+            <p>Bar snacks available at all times.</p>
           </div>
           <div class="col-md-6">
-            <h3>Enquiries</h3>
-            <li>Tennis Facilitator: Megan Callaghan</li>
-            <li>Phone: <a href="tel:+64276229309"><strong>027 622 9309</strong></a></li>
+            <h3>Functions & Catering</h3>
+            <p>Gayle is available to discuss bookings for extra functions.</p>
+            <ul>
+              <li>Phone: <a href="tel:+6478248232"><strong>07 824 8232</strong></a></li>
+              <li>Email: <a href="mailto:jcooper09@hotmail.com">jcooper09@hotmail.com</a></li>
+              <li>Postal address:
+                <p><strong>Ruakura Campus Club (Inc)<br>
+                C/- AgResearch, Private Bag 3123<br>
+                Ruakura Road, Claudelands, Hamilton</strong></p></li>
+            </ul>
+          </div>
+        </div>
+        <div class="container">
+          <h2>Tap List</h2>
+          <div id="taplist" class="row d-flex">
+            <a href="https://clubfare.hs.net.nz/">Loading tap list...</a>
+            <!-- <ul class="list-inline">
+              <li><a href="https://clubfare.hs.net.nz/">Loading tap list...</a></li>
+            </ul> -->
           </div>
         </div>
       </div>
@@ -83,9 +99,10 @@
       </span>
     </footer>
 
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="./assets/js/beerList.js"></script>
   </body>
 </html>

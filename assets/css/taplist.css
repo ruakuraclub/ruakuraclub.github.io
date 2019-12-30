@@ -43,3 +43,8 @@
 div.tooltip-inner {
   max-width: 350px;
 }
+
+#taplist img {
+  height: 2.2rem;
+  width: 2.2rem;
+}
