@@ -15,9 +15,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
   </head>
   <body onload="startTime()">
-    <div class="header"><span class="rccLogo"></span><h1>Work in Progress - Data not valid!</h1><span id="clock" class="clock"></span></div>
+    <div class="header"><span class="rccLogo"></span><h1 id="title">Loading...</h1><span id="clock" class="clock"></span></div>
     <section id="taps"></section>
-
+    <div class="marquee" id="footer"></div>
     <script type="text/javascript">
       var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/edit?usp=sharing"
       var tabletop;
@@ -28,6 +28,26 @@
           callback: displayTaps,
           simpleSheet: false
         })
+      }
+
+      function headerFooter(data, tabletop) {
+        var footerMessage = '';
+        var sheet = data['Messages'];
+        var message = sheet.elements[0];
+        if( message['Title'] == '' ) { // No title defined
+          message['Title'] = 'Tap List';
+        }
+        document.getElementById("title").innerHTML = message['Title'];
+        
+        for (var i = 0; i < sheet.elements.length; i++) {
+          message = sheet.elements[i]
+          if(footerMessage == '') {
+            footerMessage = '<span>'+message['Footer']+'</span>';
+          }else{
+            footerMessage = footerMessage + '<span>'+message['Footer']+'</span>';
+          }
+        }
+        document.getElementById("footer").innerHTML = footerMessage;
       }
 
       function displayTaps(data, tabletop) {
@@ -85,6 +105,7 @@
         var right = Mustache.render(templateHtml, templateData.right);
 
         document.getElementById("taps").innerHTML = left + right;
+        headerFooter(data,tabletop);
       }
 
       function startTime(){
@@ -114,7 +135,7 @@
 
       window.addEventListener("DOMContentLoaded", init);
       // Reload the page every 60 seconds (60000 milliseconds)
-      window.setInterval(function() { console.log('refresh'); tabletop.fetch() }, 60000)
+      window.setInterval(function() { tabletop.fetch() }, 60000)
     </script>
     <script id="tap-template" type="text/html">
       <ol>
