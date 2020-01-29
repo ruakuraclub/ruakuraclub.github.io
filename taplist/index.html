@@ -17,7 +17,7 @@
   <body onload="startTime()">
     <div class="header"><span class="rccLogo"></span><h1 id="title">Loading...</h1><span id="clock" class="clock"></span></div>
     <section id="taps"></section>
-    <div class="marquee" id="footer"></div>
+    <!-- <div class="marquee" id="footer"></div> -->
     <script type="text/javascript">
       var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/edit?usp=sharing"
       var tabletop;
@@ -47,7 +47,7 @@
             footerMessage = footerMessage + '<span>'+message['Footer']+'</span>';
           }
         }
-        document.getElementById("footer").innerHTML = footerMessage;
+        //document.getElementById("footer").innerHTML = footerMessage;
       }
 
       function displayTaps(data, tabletop) {
@@ -91,7 +91,7 @@
           field = 'litre-price'
           let takehome = parseFloat(tap[field])
           if(!isNaN(takehome)) {
-            tap[field] = "$" + sprintf("%0.2f", takehome) + '/L';
+            tap[field] = "$" + sprintf("%0.2f", takehome);// + '/L';
           } else if(tap[field] == '') {
             tap[field] = '-';
           }
@@ -145,7 +145,7 @@
           <div class="abv">ABV</div>
           <div class="hr half">Half</div>
           <div class="hr handle">Handle</div>
-          <div class="hr take-home">Rigger</div>
+          <div class="hr take-home">1.25L</div>
         </li>
         {{#beers}}
           <li class="{{Class}}" style="background-image: url('{{Badge}}');">

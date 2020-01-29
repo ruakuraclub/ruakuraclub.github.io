@@ -120,6 +120,7 @@ div.style {
 }
 
 div.abv {
+  font-size: 1.2em;
   width: 90px;
   color: #765533;
   text-align: right;
@@ -128,6 +129,7 @@ div.abv {
 div.half,
 div.handle,
 div.take-home {
+  font-size: 1.2em;
   width: 130px;
   text-align: right;
 }
@@ -137,10 +139,12 @@ div.hr {
 }
 
 div.half {
+  font-size: 1.2em;
   color: #4C4;
 }
 
 div.handle {
+  font-size: 1.2em;
   color: #6F6;
 }
 
