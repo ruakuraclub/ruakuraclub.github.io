@@ -1,0 +1,218 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: black;
+  color: white;
+  font-size: 28px;
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 2.5em;
+  /*font-family: 'Gruppo', cursive;*/
+  display: inline-block;
+  text-align: center;
+}
+
+section {
+  position: absolute;
+  width: 1920px;
+  height: 980px; /* reduced from 1080px to allow space for the title/heading */
+  overflow: hidden;
+  display: flex;
+}
+
+div.header {
+  display: flex;
+  width: 1920px;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+span.rccLogo {
+  width:180px; /*width of your image*/
+  height:141px; /*height of your image*/
+  background-image:url('../assets/images/club_logo_small.png');
+  margin:0; /* If you want no margin */
+  padding:0; /*if you want padding */
+  display:inline-block;
+}
+
+span.clock {
+  color: #0B9444;
+  font-size: 1.8em;
+  text-align: right;
+  vertical-align: middle;
+  margin:0; /* If you want no margin */
+  padding:40px 10px; /*if you want padding */
+  display:inline-block;
+}
+ol {
+  width: calc(50% - 0.5em);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ol:first-child {
+  margin-right: 1em;
+}
+
+ol > li {
+  width: 100%;
+  padding: 0.75em 1em;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  border-bottom: 3px solid #222;
+  padding-left: 125px;
+  background-repeat: no-repeat;
+  background-size: 95px;
+  background-position: 12px 50%;
+}
+
+ol > li > div {
+  flex: 0 1 auto;
+}
+
+div.name {
+  flex: 0 1 auto;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #EEE;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*div.name > span:first-child {
+  display: inline-block;
+  width: 60px;
+}
+
+div.name > span:nth-child(2) {
+  font-weight: 300;
+  font-size: 0.75em;
+  color: #EDDED0;
+}*/
+
+div.name > span:first-child {
+  font-weight: 300;
+  font-size: 0.75em;
+  color: #EDDED0;
+}
+
+div.style {
+  margin-left: 5px;
+  width: 20%;
+  color: #FFBC79;
+  flex: 1 1 auto;
+  padding-left: 10px;
+}
+
+div.abv {
+  width: 90px;
+  color: #765533;
+  text-align: right;
+}
+
+div.half,
+div.handle,
+div.take-home {
+  width: 130px;
+  text-align: right;
+}
+
+div.hr {
+  font-weight: bold;
+}
+
+div.half {
+  color: #4C4;
+}
+
+div.handle {
+  color: #6F6;
+}
+
+li.nis {
+  opacity: 0.3;
+}
+
+li.special .name {
+  background-image: url('special.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 120px;
+}
+
+li.special {
+  border-bottom: 1px solid #f90;
+}
+
+li.special div.half,
+li.special div.handle {
+  color: #fff;
+  text-shadow: 0px 0px 11px #FFAA00, 0px 0px 20px #FFAA00;
+}
+
+li.hr {
+  padding: 0 1em;
+  height: 2em;
+  border-bottom: 2px solid #666;
+  opacity: 0.7;
+  background: none;
+}
+
+.marquee {
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  width: 1920px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;  
+  margin: 0;
+  padding-bottom: 10px;
+  text-align: center;
+  -moz-animation: marquee 60s linear infinite;
+  -webkit-animation: marquee 60s linear infinite;
+  animation: marquee 60s linear infinite;
+  animation-delay: -15s;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.marquee > span:not(:nth-last-child(1)):after {
+  content: '   |   ';
+  color: gray;
+}
+@-moz-keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+@-webkit-keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes marquee {
+  0% { 
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%)
+  }
+  100% { 
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Andrew Clow, from original code by Phil Murray">
+    <meta name="robots" content="noindex, nofollow" />
+
+    <title>RCC Tap List</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Gruppo|Roboto+Condensed&display=swap" rel="stylesheet">
+    <link href="taplist.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
+  </head>
+  <body onload="startTime()">
+    <div class="header"><span class="rccLogo"></span><h1 id="title">Loading...</h1><span id="clock" class="clock"></span></div>
+    <section id="taps"></section>
+    <div class="marquee" id="footer"></div>
+    <script type="text/javascript">
+      var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/edit?usp=sharing"
+      var tabletop;
+
+      function init() {
+        tabletop = Tabletop.init( {
+          key: sheetUrl,
+          callback: displayTaps,
+          simpleSheet: false
+        })
+      }
+
+      function headerFooter(data, tabletop) {
+        var footerMessage = '';
+        var sheet = data['Messages'];
+        var message = sheet.elements[0];
+        if( message['Title'] == '' ) { // No title defined
+          message['Title'] = 'Tap List';
+        }
+        document.getElementById("title").innerHTML = message['Title'];
+        
+        for (var i = 0; i < sheet.elements.length; i++) {
+          message = sheet.elements[i]
+          if(footerMessage == '') {
+            footerMessage = '<span>'+message['Footer']+'</span>';
+          }else{
+            footerMessage = footerMessage + '<span>'+message['Footer']+'</span>';
+          }
+        }
+        document.getElementById("footer").innerHTML = footerMessage;
+      }
+
+      function displayTaps(data, tabletop) {
+        var templateData = { left: { beers: [] }, right: { beers: [] } }
+        var sheet = data['Taplist'];
+        for(var idx = 0; idx < 12; idx++ ) {
+          var tap = sheet.elements[idx];
+
+          if(tap['Name'] == '') { // Tap with no beer assigned
+            tap['Name'] = '\xa0'; // Non-Breaking Space, ensures row heights match up
+          }
+
+          if(tap['Brewery'] != '') {
+            tap['Brewery'] = ' - ' + tap['Brewery'];
+          }
+
+          let field = 'ABV'
+          let abv = parseFloat(tap[field])
+          if(!isNaN(abv)) {
+            tap[field] = sprintf("%0.1f", abv) + '%';
+          } else if(tap[field] == '') {
+            tap[field] = '-';
+          }
+
+          field = 'half-price'
+          let price = parseFloat(tap[field])
+          if(!isNaN(price)) {
+            tap[field] = "$" + sprintf("%0.2f", price);
+          } else if(tap[field] == '') {
+            tap[field] = '-';
+          }
+
+          field = 'handle-price'
+          price = parseFloat(tap[field])
+          if(!isNaN(price)) {
+            tap[field] = "$" + sprintf("%0.2f", price);
+          } else if(tap[field] == '') {
+            tap[field] = '-';
+          }
+
+          field = 'litre-price'
+          let takehome = parseFloat(tap[field])
+          if(!isNaN(takehome)) {
+            tap[field] = "$" + sprintf("%0.2f", takehome) + '/L';
+          } else if(tap[field] == '') {
+            tap[field] = '-';
+          }
+
+          templateData[parseInt(idx) < 6 ? 'left' : 'right'].beers.push(tap);
+        }
+
+        var templateHtml = document.getElementById('tap-template').innerHTML;
+
+        var left  = Mustache.render(templateHtml, templateData.left);
+        var right = Mustache.render(templateHtml, templateData.right);
+
+        document.getElementById("taps").innerHTML = left + right;
+        headerFooter(data,tabletop);
+      }
+
+      function startTime(){
+        var time = new Date()
+        var hr = time.getHours()
+        var min = time.getMinutes()
+        var sec = time.getSeconds()
+        var ampm = " pm "
+        if (hr < 12){
+          ampm = " am "
+        }
+        if (hr > 12){
+          hr -= 12
+        }
+        if (hr < 10){
+          hr = " " + hr
+        }
+        if (min < 10){
+          min = "0" + min
+        }
+        if (sec < 10){
+          sec = "0" + sec
+        }
+        document.getElementById('clock').innerHTML = hr + ":" + min + ampm
+        setTimeout("startTime()", 1000)
+      }
+
+      window.addEventListener("DOMContentLoaded", init);
+      // Reload the page every 60 seconds (60000 milliseconds)
+      window.setInterval(function() { tabletop.fetch() }, 60000)
+    </script>
+    <script id="tap-template" type="text/html">
+      <ol>
+        <li class="hr">
+          <div class="hr name"></div>
+          <div class="style"></div>
+          <div class="abv">ABV</div>
+          <div class="hr half">Half</div>
+          <div class="hr handle">Handle</div>
+          <div class="hr take-home">Rigger</div>
+        </li>
+        {{#beers}}
+          <li class="{{Class}}" style="background-image: url('{{Badge}}');">
+            <!-- <div class="name"><span>{{Tap}}.</span> {{Name}}<span>{{Brewery}}</span></div> -->
+            <div class="name">{{Name}}<span>{{Brewery}}</span></div>
+            <div class="style">{{Style}}</div>
+            <div class="abv">{{ABV}}</div>
+            <div class="half">{{half-price}}</div>
+            <div class="handle">{{handle-price}}</div>
+            <div class="take-home">{{litre-price}}</div>
+          </li>
+        {{/beers}}
+      </ol>
+    </script>
+  </body>
+</html>
