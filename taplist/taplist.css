@@ -4,6 +4,7 @@
 
 body {
   background-color: black;
+  width: 1920px;
   color: white;
   font-size: 28px;
   padding: 0;
@@ -29,7 +30,8 @@ section {
 
 div.header {
   display: flex;
-  width: 1920px;
+  height:141px;
+  /*width: 1920px;*/
   overflow: hidden;
   justify-content: space-between;
 }
@@ -94,17 +96,6 @@ div.name {
   overflow: hidden;
 }
 
-/*div.name > span:first-child {
-  display: inline-block;
-  width: 60px;
-}
-
-div.name > span:nth-child(2) {
-  font-weight: 300;
-  font-size: 0.75em;
-  color: #EDDED0;
-}*/
-
 div.name > span:first-child {
   font-weight: 300;
   font-size: 0.75em;
@@ -122,7 +113,7 @@ div.style {
 div.abv {
   font-size: 1.2em;
   width: 90px;
-  color: #765533;
+  color: #FFC8A5;
   text-align: right;
 }
 
@@ -177,7 +168,7 @@ li.hr {
   background: none;
 }
 
-.marquee {
+marquee {
   position: absolute;
   display: flex;
   bottom: 0;
@@ -188,35 +179,11 @@ li.hr {
   margin: 0;
   padding-bottom: 10px;
   text-align: center;
-  -moz-animation: marquee 60s linear infinite;
-  -webkit-animation: marquee 60s linear infinite;
-  animation: marquee 60s linear infinite;
-  animation-delay: -15s;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 1.5em;
   font-weight: bold;
 }
-.marquee > span:not(:nth-last-child(1)):after {
+marquee > span:not(:nth-last-child(1)):after {
   content: '   |   ';
   color: gray;
-}
-@-moz-keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-@-webkit-keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-@keyframes marquee {
-  0% { 
-    -moz-transform: translateX(100%);
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%)
-  }
-  100% { 
-    -moz-transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
-  }
 }
