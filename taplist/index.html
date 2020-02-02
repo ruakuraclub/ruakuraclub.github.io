@@ -17,7 +17,6 @@
   <body onload="startTime()">
     <div class="header"><span class="rccLogo"></span><h1 id="title">Loading...</h1><span id="clock" class="clock"></span></div>
     <section id="taps"></section>
-    <!-- <div class="marquee" id="footer"></div> -->
     <marquee id="footer"></marquee>
     <script type="text/javascript">
       var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/edit?usp=sharing"
@@ -39,7 +38,7 @@
           message['Title'] = 'Tap List';
         }
         document.getElementById("title").innerHTML = message['Title'];
-        
+
         for (var i = 0; i < sheet.elements.length; i++) {
           message = sheet.elements[i]
           if(footerMessage == '') {
