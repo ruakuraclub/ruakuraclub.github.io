@@ -6,18 +6,188 @@
     <meta name="robots" content="noindex, nofollow" />
 
     <title>RCC Tap List</title>
+
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Gruppo|Roboto+Condensed&display=swap" rel="stylesheet">
-    <link href="taplist.css" rel="stylesheet">
+    <link href="test.css" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
   </head>
+
   <body onload="startTime()">
-    <div class="header"><span class="rccLogo"></span><h1 id="title">Loading...</h1><span id="clock" class="clock"></span></div>
-    <section id="taps"></section>
-    <marquee id="footer"></marquee>
+
+    <div class="container">
+
+      <div class="box header">
+        <div class="logo"></div>
+        <div class="title">
+          <h1 id="title">Loading...</h1>
+        </div>
+        <div id="clock" class="clock"></div>
+      </div>
+
+      <div id="taps" class="box taplist">
+
+        <!-- <div class="labelHeader">
+          <div class="labels">
+            <div class=""></div>
+            <div class="abv">ABV</div>
+            <div class="half">Half</div>
+            <div class="handle">Handle</div>
+            <div class="take-home">1.25L</div>
+          </div>
+
+          <div class="labels">
+            <div class=""></div>
+            <div class="abv">ABV</div>
+            <div class="half">Half</div>
+            <div class="handle">Handle</div>
+            <div class="take-home">1.25L</div>
+          </div>
+        </div>
+
+        <div class="tapContents">
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="../assets/images/serving.png">
+            </div>
+              <div class="name">1. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">English Bitter</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">2. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Lager - Dark</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails nis">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">3. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Porter</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">4. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">NZ Pale Ale</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails special">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">5. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Lager - Red</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">6. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Porter - Baltic</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+
+          <div class="beerDetails special">
+            <div class="badge">
+              <img src="../assets/images/serving.png">
+            </div>
+              <div class="name">7. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">NZ Pilsner</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">8. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Kolsch</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">9. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Pale Ale</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails nis">
+            <div class="badge ">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">10. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Lager - Helles</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">11. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Pale Ale</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div>
+          <div class="beerDetails">
+            <div class="badge">
+              <img src="default_tap.svg">
+            </div>
+              <div class="name">12. Beer Name<span>- Brewery Name</span></div>
+              <div class="beerStyle">Double IPA</div>
+              <div class="values abv">?%</div>
+              <div class="values half">$a.bc</div>
+              <div class="values handle">$d.ef</div>
+              <div class="values take-home">$gg.hh</div>
+          </div> -->
+
+        </div>
+      </div>
+
+      <div class="box footer"><marquee id="footer"><span>Placeholder data, this should replace with message text...</span></marquee></div>
+    </div>
+
     <script type="text/javascript">
       var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/edit?usp=sharing"
       var tabletop;
@@ -51,7 +221,7 @@
       }
 
       function displayTaps(data, tabletop) {
-        var templateData = { left: { beers: [] }, right: { beers: [] } }
+        var beerList = { beers: [] };
         var sheet = data['Taplist'];
         for(var idx = 0; idx < 12; idx++ ) {
           var tap = sheet.elements[idx];
@@ -91,20 +261,19 @@
           field = 'rigger'
           let takehome = parseFloat(tap[field])
           if(!isNaN(takehome)) {
-            tap[field] = "$" + sprintf("%0.2f", takehome);// + '/L';
+            tap[field] = "$" + sprintf("%0.2f", takehome);
           } else if(tap[field] == '') {
             tap[field] = '-';
           }
 
-          templateData[parseInt(idx) < 6 ? 'left' : 'right'].beers.push(tap);
+          beerList.beers.push(tap);
         }
 
         var templateHtml = document.getElementById('tap-template').innerHTML;
 
-        var left  = Mustache.render(templateHtml, templateData.left);
-        var right = Mustache.render(templateHtml, templateData.right);
+        var renderedList  = Mustache.render(templateHtml, beerList);
 
-        document.getElementById("taps").innerHTML = left + right;
+        document.getElementById("taps").innerHTML = renderedList;
         headerFooter(data,tabletop);
       }
 
@@ -137,28 +306,42 @@
       // Reload the page every 60 seconds (60000 milliseconds)
       window.setInterval(function() { tabletop.fetch() }, 60000)
     </script>
+
+
     <script id="tap-template" type="text/html">
-      <ol>
-        <li class="hr">
-          <div class="hr name"></div>
-          <div class="style"></div>
+      <div class="labelHeader">
+        <div class="labels">
+          <div class=""></div>
           <div class="abv">ABV</div>
-          <div class="hr half">Half</div>
-          <div class="hr handle">Handle</div>
-          <div class="hr take-home">1.25L</div>
-        </li>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+          <div class="take-home">1.25L</div>
+        </div>
+        <div class="labels">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+          <div class="take-home">1.25L</div>
+        </div>
+      </div>
+      <div class="tapContents">
         {{#beers}}
-          <li class="{{Class}}" style="background-image: url('{{Badge}}');">
-            <!-- <div class="name"><span>{{Tap}}.</span> {{Name}}<span>{{Brewery}}</span></div> -->
-            <div class="name">{{Name}}<span>{{Brewery}}</span></div>
-            <div class="style">{{Style}}</div>
-            <div class="abv">{{ABV}}</div>
-            <div class="half">{{half-price}}</div>
-            <div class="handle">{{handle-price}}</div>
-            <div class="take-home">{{rigger}}</div>
-          </li>
+        <div class="beerDetails {{Class}}">
+          <div class="badge">
+            <img src="{{Badge}}">
+          </div>
+          <!-- <div class="name">{{Tap}}. {{Name}}<span>{{Brewery}}</span></div> -->
+          <div class="name">{{Name}}<span>{{Brewery}}</span></div>
+          <div class="beerStyle">{{Style}}</div>
+          <div class="values abv">{{ABV}}</div>
+          <div class="values half">{{half-price}}</div>
+          <div class="values handle">{{handle-price}}</div>
+          <div class="values take-home">{{rigger}}</div>
+        </div>
         {{/beers}}
-      </ol>
+      </div>
     </script>
+
   </body>
 </html>
