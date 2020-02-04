@@ -44,19 +44,19 @@ body {
   grid-template-columns: auto 90px 130px 130px 130px;
   text-align: right;
   font-weight: bold;
-  /*border-bottom: 2px solid #666;*/
+  border-bottom: 2px solid #666;
 }
 
 .tapContents {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-column-gap: 20px;
-  grid-row-gap: 1rem;
+  grid-row-gap: 0.25rem;
   grid-template-areas: "beerDetails" "beerDetails";
-  grid-template-rows: repeat(6, 100px);
+  grid-template-rows: repeat(6, 6.5rem);
   grid-auto-flow: column;
-  padding: 5px 5px 5px 5px;
-  margin: 0 5px 0 5px;
+/*  padding: 5px 5px 5px 5px;
+  margin: 0 5px 0 5px;*/
 }
 
 .badge img {
@@ -67,13 +67,13 @@ body {
 }
 
 .beerDetails {
-  border-top: 2px solid #666;
+  /*border-top: 2px solid #666;*/
   display: grid;
   grid-template-columns: 120px auto 90px 130px 130px 130px;
   grid-template-rows: 3rem;
-  grid-auto-rows: 3rem;
+  grid-auto-rows: 2.5rem;
   grid-row-gap: 0.5rem;
-  /*border-bottom: 2px solid #666;*/
+  border-bottom: 2px solid #666;
 }
 
 div.badge {
@@ -157,7 +157,7 @@ div.beerStyle {
 }
 
 .special {
-  border-top: 2px solid #f90;
+  border-bottom: 2px solid #f90;
 }
 
 .special div.half,
@@ -251,7 +251,7 @@ marquee {
   text-align: center;
   vertical-align: middle;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 4rem;
+  font-size: 2.5rem;
   font-weight: bold;
 }
 
