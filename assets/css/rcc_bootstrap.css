@@ -1,18 +1,22 @@
 .site-copyright::after {
-    content: "\00a9 2020 Ruakura Campus Club (Inc.)";
+  content: "\00a9 2020 Ruakura Campus Club (Inc.)";
 }
-#rccCarousel .carousel-caption {
-    margin-bottom:4px;
-    background-color: rgba(191,191,191,0.4);
-    color: rgb(0,0,0);
+.carousel-caption {
+  top: 15px;
+  background-color: rgba(191,191,191,0.4);
+  color: rgb(0,0,0);
+  bottom: auto;
 }
+
 .carousel-inner{
-  max-height: 330px !important;
+  max-height: 500px !important;
+  overflow: hidden;
 }
 
 /* centered columns styles */
 .row-centered {
     text-align:center;
+    vertical-align: middle;
 }
 .col-centered {
     display:inline-block;
