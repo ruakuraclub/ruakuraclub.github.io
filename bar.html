@@ -65,7 +65,7 @@
       <div class="jumbotron">
         <div class="container">
           <div class="row">
-            <div class="col-md-4"><image src="./assets/images/club_logo_small.png" alt="RCC Logo"></image></div>
+            <div class="col-md-4"><image src="./assets/images/club_logo_small.png" alt="RCC Logo" class="clubLogo"></image></div>
             <div class="col-md-8">
               <h2>Ruakura Club Bar</h2>
               <p>Hamilton's first craft beer bar, we have been serving local craft beers since the early 2000s</p>
@@ -94,14 +94,19 @@
             </ul>
           </div>
         </div>
-        <div class="container">
-          <h3>Bar</h3>
-          <p>A range of wine, spirits, RTDs, bottle beer and non-alcholic drinks are available</p>
-          <div><h4 style="display:inline;">Tap Beers</h4><em style="display:inline;">&nbsp;&nbsp;Check back often as these change regularly</em></div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Bar</h3>
+              <p>A range of wine, spirits, RTDs, bottle beer and non-alcholic drinks are available</p>
+              <div style="padding-bottom: 0.5rem;"><h4 style="display:inline;">Tap Beers</h4><em style="display:inline;">&nbsp;&nbsp;Check back often as these change regularly</em></div>
+            </div>
+          </div>
+          <div class="container">
           <div id="taplist" class="row d-flex">
             <a href="https://clubfare.hs.net.nz/">Loading tap list...</a>
           </div>
-        </div>
+</div>
       </div>
       <hr>
     </main>
@@ -115,7 +120,10 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
 
-    <script src="./assets/js/beerList.js"></script>
+    <!-- <script src="./assets/js/beerList.js"></script> -->
+    <script src="./assets/js/whatsOnTap.js"></script>
   </body>
 </html>

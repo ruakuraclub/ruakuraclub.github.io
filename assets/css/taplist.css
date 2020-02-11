@@ -20,7 +20,7 @@
   padding: 10px 0px 10px 80px;
   background-repeat: no-repeat;
   font-size: 12px;
-  /* Try to work around spliiting inside an element in columnar mode */
+  /* Try to work around splitting inside an element in columnar mode */
   -webkit-column-break-inside: avoid;
   -moz-column-break-inside: avoid;
   -o-column-break-inside: avoid;
@@ -45,6 +45,13 @@ div.tooltip-inner {
 }
 
 #taplist img {
-  height: 2.2rem;
-  width: 2.2rem;
+  height: 4.5rem;
+  width: 4.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+#taplist .card-subtitle {
+  font-size: 1.1rem;
 }
