@@ -207,7 +207,9 @@
         if( message['Title'] == '' ) { // No title defined
           message['Title'] = 'Tap List';
         }
-        document.getElementById("title").innerHTML = message['Title'];
+        if (document.getElementById("title").innerHTML !== message['Title']) {
+          document.getElementById("title").innerHTML = message['Title'];
+        }
 
         for (var i = 0; i < sheet.elements.length; i++) {
           message = sheet.elements[i]
@@ -217,7 +219,9 @@
             footerMessage = footerMessage + '<span>'+message['Footer']+'</span>';
           }
         }
-        document.getElementById("footer").innerHTML = footerMessage;
+        if (document.getElementById("footer").innerHTML !== footerMessage) {
+          document.getElementById("footer").innerHTML = footerMessage;
+        }
       }
 
       function displayTaps(data, tabletop) {
@@ -274,6 +278,7 @@
         var renderedList  = Mustache.render(templateHtml, beerList);
 
         document.getElementById("taps").innerHTML = renderedList;
+
         headerFooter(data,tabletop);
       }
 

@@ -157,6 +157,18 @@ div.beerStyle {
   text-shadow: 0px 0px 11px #FFAA00, 0px 0px 20px #FFAA00;
 }
 
+.new .name {
+  background-image: url('green-star.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 1.5rem;
+}
+
+.new {
+  border-bottom: 2px solid #6F6;
+}
+
+
 @media only screen and (min-width: 1200px)  {
   html {
     font-size: 0.95vw;
