@@ -184,7 +184,7 @@
 
         </div>
       </div>
-
+      <div class="box cardKey" id="cardDetails">Card symbol details go here...</div>
       <div class="box footer"><marquee id="footer"><span>Placeholder data, this should replace with message text...</span></marquee></div>
     </div>
 
@@ -204,16 +204,23 @@
         var footerMessage = '';
         var sheet = data['Messages'];
         var message = sheet.elements[0];
-        if( message['Title'] == '' ) { // No title defined
+        if ( message['Title'] == '' ) { // No title defined
           message['Title'] = 'Tap List';
         }
         if (document.getElementById("title").innerHTML !== message['Title']) {
           document.getElementById("title").innerHTML = message['Title'];
         }
 
+        message = sheet.elements[1];
+        if ( message['Title'] == '' ) { // No card details entered below the title
+          document.getElementById("cardDetails").innerHTML = '';
+        }else{
+          document.getElementById("cardDetails").innerHTML = '<img src="card.png" class="cardDetailsImage"/>' + message['Title'];
+        }
+
         for (var i = 0; i < sheet.elements.length; i++) {
           message = sheet.elements[i]
-          if(footerMessage == '') {
+          if (footerMessage == '') {
             footerMessage = '<span>'+message['Footer']+'</span>';
           }else{
             footerMessage = footerMessage + '<span>'+message['Footer']+'</span>';
@@ -262,13 +269,13 @@
             tap[field] = '-';
           }
 
-          field = 'rigger'
+/*          field = 'rigger'
           let takehome = parseFloat(tap[field])
           if(!isNaN(takehome)) {
             tap[field] = "$" + sprintf("%0.2f", takehome);
           } else if(tap[field] == '') {
             tap[field] = '-';
-          }
+          }*/
 
           beerList.beers.push(tap);
         }
@@ -320,14 +327,14 @@
           <div class="abv">ABV</div>
           <div class="half">Half</div>
           <div class="handle">Handle</div>
-          <div class="take-home">1.25L</div>
+          <!-- <div class="take-home">1.25L</div> -->
         </div>
         <div class="labels">
           <div class=""></div>
           <div class="abv">ABV</div>
           <div class="half">Half</div>
           <div class="handle">Handle</div>
-          <div class="take-home">1.25L</div>
+          <!-- <div class="take-home">1.25L</div> -->
         </div>
       </div>
       <div class="tapContents">
@@ -342,7 +349,7 @@
           <div class="values abv">{{ABV}}</div>
           <div class="values half">{{half-price}}</div>
           <div class="values handle">{{handle-price}}</div>
-          <div class="values take-home">{{rigger}}</div>
+          <!-- <div class="values take-home">{{rigger}}</div> -->
         </div>
         {{/beers}}
       </div>

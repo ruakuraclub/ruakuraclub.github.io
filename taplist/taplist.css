@@ -15,6 +15,7 @@ body {
   grid-template-areas:
     "header"
     "taplist"
+    "cardKey"
     "footer";
 }
 
@@ -35,7 +36,8 @@ body {
 
 .labels {
   display: grid;
-  grid-template-columns: auto 4rem 7rem 7rem 7rem;
+  /*grid-template-columns: auto 4rem 7rem 7rem 7rem;*/
+  grid-template-columns: auto 4rem 7rem 7rem;
   text-align: right;
   font-weight: bold;
   border-bottom: 2px solid #666;
@@ -60,7 +62,8 @@ body {
 
 .beerDetails {
   display: grid;
-  grid-template-columns: 5.5rem auto 4rem 7rem 7rem 7rem;
+  /*grid-template-columns: 5.5rem auto 4rem 7rem 7rem 7rem;*/
+  grid-template-columns: 5.5rem auto 4rem 7rem 7rem;
   grid-template-rows: 3rem;
   grid-auto-rows: 2.5rem;
   grid-row-gap: 0.5rem;
@@ -76,7 +79,8 @@ div.badge {
 }
 
 div.name {
-  grid-column: span 5;
+  /*grid-column: span 5;*/
+  grid-column: span 4;
 }
 
 .values{
@@ -140,6 +144,23 @@ div.beerStyle {
   opacity: 0.3;
 }
 
+.card .name {
+  background-image: url('card.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 1.5rem;
+}
+
+.card {
+  border-bottom: 2px solid #09F;
+}
+
+/*.card div.half,
+.card div.handle {
+  color: #09F;
+  text-shadow: 0px 0px 8px #06D , 0px 0px 8px #06D;
+}*/
+
 .special .name {
   background-image: url('special.svg');
   background-repeat: no-repeat;
@@ -202,8 +223,9 @@ div.beerStyle {
   grid-template-columns: 15% auto 15%;
   grid-template-areas: "logo title clock";
   background-color: black;
-  grid-template-rows: 141px;
-  padding-bottom: 0.75rem;
+  /*grid-template-rows: 141px;*/
+  grid-template-rows: 130px;
+  padding-bottom: 0rem;
 }
 
 .logo {
@@ -236,6 +258,22 @@ div.beerStyle {
   padding-top: 40px;
 }
 
+.cardDetailsImage {
+  vertical-align: middle;
+  height: 1.3rem;
+  padding-right: 1rem;
+}
+
+.cardKey {
+  padding-top: 0px;
+  font-size: 1.3rem;
+  text-align: center;
+  vertical-align: middle;
+  color: #09F;
+/*  text-decoration: underline;
+  text-decoration-color: #09F;*/
+}
+
 .footer {
   display: grid;
   grid-template-columns: 98vw;
@@ -246,7 +284,7 @@ div.beerStyle {
 }
 
 marquee {
-  padding: 0.5rem 0;
+  padding: 0.2rem 0;
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
