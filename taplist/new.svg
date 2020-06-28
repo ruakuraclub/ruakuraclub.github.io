@@ -1,0 +1,17 @@
+<svg width="160.00000000000003" height="48" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style>.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}</style>
+ </defs>
+ <title>special-01</title>
+ <g>
+  <title>background</title>
+  <rect x="-1" y="-1" width="162" height="50" id="canvas_background" fill="none"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path class="cls-3" d="m43,22.546874z" id="svg_3"/>
+  <text fill="#5fbf00" stroke="null" stroke-width="0" stroke-opacity="null" x="41.154536" y="33.634257" id="svg_4" font-size="32" font-family="'League Gothic', sans-serif" text-anchor="start" xml:space="preserve" font-style="normal" font-weight="bold">NEW</text>
+  <path fill="#5fbf00" stroke="null" stroke-width="0" d="m5.53716,18.508977l12.28494,0l3.79614,-11.66548l3.79614,11.66548l12.28494,0l-9.93871,7.20958l3.79634,11.66548l-9.93871,-7.20977l-9.93871,7.20977l3.79634,-11.66548l-9.93871,-7.20958z" id="svg_5" transform="rotate(-5 21.618240356445305,22.113767623901364) "/>
+  <path fill="#5fbf00" stroke="null" stroke-width="0" d="m121.69932,18.508977l12.28494,0l3.79614,-11.66548l3.79615,11.66548l12.28493,0l-9.9387,7.20958l3.79633,11.66548l-9.93871,-7.20978l-9.93871,7.20978l3.79634,-11.66548l-9.93871,-7.20958z" id="svg_6" transform="rotate(5 137.7803955078125,22.113767623901474) "/>
+ </g>
+</svg>
