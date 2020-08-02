@@ -12,8 +12,8 @@
     <link href="taplist.css" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
   </head>
 
   <body onload="startTime()">
@@ -22,19 +22,18 @@
 
       <div class="box header">
         <div class="logo"></div>
-        <div class="title">
-          <h1 id="title">Loading...</h1>
-        </div>
+          <div class="title">
+            <h1 id="title">Loading...</h1>
+          </div>
         <div id="clock" class="clock"></div>
       </div>
 
       <div id="taps" class="box taplist">
 
-        </div>
       </div>
-      <div class="box cardKey" id="cardDetails"><!-- ...card message placeholder... --></div>
-      <div class="box footer" id="footer"><marquee><span><!-- ...placeholder, this should replace with message text... --></span></marquee></div>
     </div>
+    <div class="box cardKey" id="cardDetails"><!-- ...card message placeholder... --></div>
+    <div class="box footer" id="footer"><marquee><span><!-- ...placeholder, this should replace with message text... --></span></marquee></div>
 
     <script type="text/javascript">
       var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/pubhtml";
@@ -94,6 +93,7 @@
       function displayTaps(data, tabletop) {
         var beerList = { beers: [] };
         var sheet = data['Taplist'];
+        var showJug = false;
         for(var idx = 0; idx < 12; idx++ ) {
           var tap = sheet.elements[idx];
           if(tap['Name'] == '') { // Tap with no beer assigned
@@ -128,10 +128,25 @@
             tap[field] = '-';
           }
 
+          field = 'jug-price'
+          price = parseFloat(tap[field])
+          if(!isNaN(price)) {
+            tap[field] = "$" + sprintf("%0.2f", price);
+            showJug = true;
+          } else if(tap[field] == '') {
+            tap[field] = '-';
+          }
+
           beerList.beers.push(tap);
         }
 
-        var templateHtml = document.getElementById('tap-template').innerHTML;
+        if ( showJug ) {
+          var templateHtml = document.getElementById('tap-template').innerHTML;
+          document.getElementById("taps").className = "box taplist";
+        } else {
+          document.getElementById("taps").className = "box taplistNoJug";
+          var templateHtml = document.getElementById('tap-template-noJug').innerHTML;
+        }
 
         var renderedList  = Mustache.render(templateHtml, beerList);
 
@@ -170,30 +185,62 @@
       window.setInterval(function() { tabletop.fetch() }, 60000)
     </script>
 
-
     <script id="tap-template" type="text/html">
       <div class="labelHeader">
-        <div class="labels">
+        <div class="labels withJug">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+          <div class="jug">Jug</div>
+        </div>
+        <div class="labels withJug">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+          <div class="jug">Jug</div>
+        </div>
+      </div>
+      <div class="tapContentsWithJug">
+        {{#beers}}
+        <div class="beersWithJug {{Class}}">
+          <div class="badge">
+            <img src="{{Badge}}">
+          </div>
+          <div class="nameWithJug">{{Name}}<span>{{Brewery}}</span></div>
+          <div class="beerStyle">{{Style}}</div>
+          <div class="values abv">{{ABV}}</div>
+          <div class="values half">{{half-price}}</div>
+          <div class="values handle">{{handle-price}}</div>
+          <div class="values jug">{{jug-price}}</div>
+        </div>
+        {{/beers}}
+      </div>
+    </script>
+
+    <script id="tap-template-noJug" type="text/html">
+      <div class="labelHeader">
+        <div class="labels noJug">
           <div class=""></div>
           <div class="abv">ABV</div>
           <div class="half">Half</div>
           <div class="handle">Handle</div>
         </div>
-        <div class="labels">
+        <div class="labels noJug">
           <div class=""></div>
           <div class="abv">ABV</div>
           <div class="half">Half</div>
           <div class="handle">Handle</div>
         </div>
       </div>
-      <div class="tapContents">
+      <div class="tapContentsNoJug">
         {{#beers}}
-        <div class="beerDetails {{Class}}">
+        <div class="beersNoJug {{Class}}">
           <div class="badge">
             <img src="{{Badge}}">
           </div>
-          <!-- <div class="name">{{Tap}}. {{Name}}<span>{{Brewery}}</span></div> -->
-          <div class="name">{{Name}}<span>{{Brewery}}</span></div>
+          <div class="nameNoJug">{{Name}}<span>{{Brewery}}</span></div>
           <div class="beerStyle">{{Style}}</div>
           <div class="values abv">{{ABV}}</div>
           <div class="values half">{{half-price}}</div>
