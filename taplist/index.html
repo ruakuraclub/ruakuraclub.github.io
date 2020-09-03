@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="box cardKey" id="cardDetails"><!-- ...card message placeholder... --></div>
-    <div class="box footer" id="footer"><marquee><span><!-- ...placeholder, this should replace with message text... --></span></marquee></div>
+    <div class="box footer" id="footer"><!-- ...placeholder, this should replace with message text... --></div>
 
     <script type="text/javascript">
       var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/pubhtml";
@@ -61,7 +61,7 @@
 
         if ( sheet.elements.length == 1 ) {
           document.getElementById("cardDetails").innerHTML = '';
-          footerMessage = '<span>'+message['Footer']+'</span>';
+          footerMessage = '<p class="singlefooter">'+message['Footer']+'</p>';
         }else{
 
           message = sheet.elements[1]; // Row 3
@@ -72,21 +72,53 @@
           }
 
           for (var i = 0; i < sheet.elements.length; i++) {
+            var separator = '&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;';
             message = sheet.elements[i]
             if (footerMessage == '') {
               footerItems++;
-              footerMessage = '<span>'+message['Footer']+'</span>';
+              footerMessage = message['Footer'];
             }else if ( message['Footer'] ) {
               footerItems++;
-              footerMessage = footerMessage + '<span>'+message['Footer']+'</span>';
+              footerMessage = footerMessage + separator + message['Footer'];
             }
           }
-          if ( footerItems > 1 ) {
-            footerMessage = '<marquee>' + footerMessage + '</marquee>';
-          }
+
         }
-        if (document.getElementById("footer").innerHTML !== footerMessage) {
+        if ( footerMessage == '' ) {
+          // No footer set, show the url centered.
+          footerMessage = 'ruakura-club.co.nz';
+        }else if ( !footerMessage.includes('ruakura-club.co.nz') ) {
+          // footer doesn't include the url, add it at the end.
+          footerMessage = footerMessage + separator + 'ruakura-club.co.nz';
+        }
+
+        // get current value of the marquee text so we can compare it to what we've just built
+        if ( document.getElementById("footerScroll") ) {
+          var currentValue = document.getElementById("footerScroll").innerHTML;
+        }else{
+          var currentValue = document.getElementById("footer").innerHTML;
+        }
+        // console.log('current: '+currentValue);
+        // console.log('new: '+footerMessage);
+        if (currentValue !== footerMessage) {
+          // console.log('replacing current: '+currentValue);
+          // console.log('with new: '+footerMessage);
+          if ( footerItems > 1 ) {
+            // multiple items, set it to scroll
+            footerMessage = '<p class="marquee"><span id="footerScroll">' + footerMessage + '</span></p>';
+          }else{
+            // no scroll if there's only one item.
+            footerMessage = '<p class="singlefooter">' + footerMessage + '</p>';
+          }
+          // set the footer element!
           document.getElementById("footer").innerHTML = footerMessage;
+          if ( document.getElementById("footerScroll") ) {
+            // calculate the speed of the scroll using a ratio that allows for full-width message to take 30sec to scroll.
+            // this will mean minimum 30secs for short messages, but all messages move at same visual speed.
+            var timeInSeconds = 30 * Math.ceil( document.getElementById("footerScroll").clientWidth / document.getElementById("footer").offsetWidth );
+            // console.log('time: '+timeInSeconds);
+            document.getElementById("footerScroll").style.setProperty("animation", "marquee " + timeInSeconds + "s linear infinite");
+          }
         }
       }
 
@@ -150,8 +182,9 @@
 
         var renderedList  = Mustache.render(templateHtml, beerList);
 
-        document.getElementById("taps").innerHTML = renderedList;
-
+        if (document.getElementById("taps").innerHTML !== renderedList) {
+          document.getElementById("taps").innerHTML = renderedList;
+        }
         headerFooter(data,tabletop);
       }
 
@@ -182,7 +215,7 @@
 
       window.addEventListener("DOMContentLoaded", init);
       // Reload the page every 60 seconds (60000 milliseconds)
-      window.setInterval(function() { tabletop.fetch() }, 60000)
+      window.setInterval(function() { tabletop.fetch() }, 10000)
     </script>
 
     <script id="tap-template" type="text/html">
