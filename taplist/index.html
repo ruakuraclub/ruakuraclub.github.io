@@ -50,6 +50,7 @@
       function headerFooter(data, tabletop) {
         var footerMessage = '';
         var footerItems = 0;
+        var separator = '&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;';
         var sheet = data['Messages'];
         var message = sheet.elements[0]; // Row 2
         if ( message['Title'] == '' ) { // No title defined
@@ -61,7 +62,9 @@
 
         if ( sheet.elements.length == 1 ) {
           document.getElementById("cardDetails").innerHTML = '';
-          footerMessage = '<p class="singlefooter">'+message['Footer']+'</p>';
+          if ( message['Footer'] ) {
+           footerMessage = message['Footer'];
+          }
         }else{
 
           message = sheet.elements[1]; // Row 3
@@ -72,7 +75,6 @@
           }
 
           for (var i = 0; i < sheet.elements.length; i++) {
-            var separator = '&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;';
             message = sheet.elements[i]
             if (footerMessage == '') {
               footerItems++;
@@ -84,7 +86,8 @@
           }
 
         }
-        if ( footerMessage == '' ) {
+
+        if ( footerMessage === '' ) {
           // No footer set, show the url centered.
           footerMessage = 'ruakura-club.co.nz';
         }else if ( !footerMessage.includes('ruakura-club.co.nz') ) {
@@ -215,7 +218,7 @@
 
       window.addEventListener("DOMContentLoaded", init);
       // Reload the page every 60 seconds (60000 milliseconds)
-      window.setInterval(function() { tabletop.fetch() }, 10000)
+      window.setInterval(function() { tabletop.fetch() }, 60000)
     </script>
 
     <script id="tap-template" type="text/html">
