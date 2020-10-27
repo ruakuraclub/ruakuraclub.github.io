@@ -20,7 +20,7 @@ function displayTaps(data, tabletop) {
       tap['Name'] = '\xa0'; // Non-Breaking Space, ensures row heights match up
     }
 
-    if(tap['Badge'] == 'default_tap.svg') {
+    if( !tap['Badge'].includes('http') ){
       tap['Badge'] = './taplist/'+tap['Badge'];
     }
 
