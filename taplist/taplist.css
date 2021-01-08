@@ -2,6 +2,7 @@
 body {
   background-color: black;
   font-family: 'Roboto Condensed', sans-serif;
+  /*font-family: 'Sunflower', sans-serif;*/
   color: white;
   margin: 0.5rem;
 }
@@ -15,7 +16,6 @@ body {
   grid-template-areas:
     "header"
     "taplist"
-    "cardKey"
     "footer";
 }
 
@@ -199,30 +199,6 @@ div.beerStyle {
   opacity: 0.3;
 }
 
-.card .nameNoJug {
-  background-image: url('card.png');
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: 1.5rem;
-}
-
-.card .nameWithJug {
-  background-image: url('card.png');
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: 1.5rem;
-}
-
-.card {
-  border-bottom: 2px solid #09F;
-}
-
-/*.card div.half,
-.card div.handle {
-  color: #09F;
-  text-shadow: 0px 0px 8px #06D , 0px 0px 8px #06D;
-}*/
-
 .special .nameNoJug {
   background-image: url('special.svg');
   background-repeat: no-repeat;
@@ -335,22 +311,6 @@ div.beerStyle {
   padding-top: 40px;
 }
 
-.cardDetailsImage {
-  vertical-align: middle;
-  height: 1.3rem;
-  padding-right: 1rem;
-}
-
-.cardKey {
-  padding-top: 0px;
-  font-size: 1.3rem;
-  text-align: center;
-  vertical-align: middle;
-  color: #09F;
-/*  text-decoration: underline;
-  text-decoration-color: #09F;*/
-}
-
 .footer {
   display: grid;
   grid-template-columns: 98vw;
@@ -416,13 +376,13 @@ mark.fade {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee { 
-    white-space: normal 
+  .marquee {
+    white-space: normal
   }
   .marquee span {
     animation-iteration-count: 1;
-    animation-duration: 0.01; 
-    /* instead of animation: none, so an animation end event is 
+    animation-duration: 0.01;
+    /* instead of animation: none, so an animation end event is
      * still available, if previously attached.
      */
     padding-left: 0;

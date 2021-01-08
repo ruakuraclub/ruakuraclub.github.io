@@ -1,20 +1,15 @@
-var sheetUrl = "https://docs.google.com/spreadsheets/d/1Zr9JT4QnnwZU9PuBM0S4lJQzfayxDLxEh1CoPzV4194/edit?usp=sharing";
-var tabletop;
+var sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=0&single=true&output=csv";
 
 function init() {
-  tabletop = Tabletop.init( {
-    key: sheetUrl,
-    callback: displayTaps,
-    simpleSheet: false
-  })
+ Papa.parse( sheetUrl, { download: true, header: true, complete: displayTaps } );
 }
 
-function displayTaps(data, tabletop) {
+function displayTaps( results ) {
   var beerList = { beers: [] };
-  var sheet = data['Taplist'];
+  var sheet = results.data;
   $('#taplist').empty();
   for(var idx = 0; idx < 12; idx++ ) {
-    var tap = sheet.elements[idx];
+    var tap = sheet[idx];
 
     if(tap['Name'] == '') { // Tap with no beer assigned
       tap['Name'] = '\xa0'; // Non-Breaking Space, ensures row heights match up
