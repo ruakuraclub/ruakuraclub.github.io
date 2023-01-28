@@ -24,7 +24,15 @@ body {
   grid-area: taplist;
   grid-template-areas:
     "labelHeader"
-    "theTaps";
+    "tapContentsWithJug";
+}
+
+.taplistNoJug {
+  display: grid;
+  grid-area: taplist;
+  grid-template-areas:
+    "labelHeader"
+    "tapContentsNoJug";
 }
 
 .labelHeader {
@@ -34,31 +42,38 @@ body {
   grid-template-areas: "labels" "labels";
 }
 
+.withJug {
+  grid-template-columns: auto 4rem 7rem 7rem 7rem;
+}
+
+.noJug {
+  grid-template-columns: auto 4rem 7rem 7rem;
+}
+
 .labels {
   display: grid;
   text-align: right;
   font-weight: normal;
   border-bottom: 2px solid #666;
-  grid-template-columns: 5.5rem minmax(10rem, 15rem) 6rem 7rem 7rem 7rem;
 }
 
-.theTaps {
+.tapContentsWithJug {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
-  grid-template-areas: "beerDetails" "beerDetails";
+  grid-template-areas: "beersWithJug" "beersWithJug";
   grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
-  grid-template-rows: repeat(5, 7.4rem);
+  grid-row-gap: 0.25rem;
+  grid-template-rows: repeat(6, 6.0rem);
   grid-auto-flow: column;
 }
 
-.theTapsTwelve {
+.tapContentsNoJug {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
-  grid-template-areas: "beerDetails" "beerDetails";
+  grid-template-areas: "beersNoJug" "beersNoJug";
   grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
-  grid-template-rows: repeat(6, 7rem);
+  grid-row-gap: 0.25rem;
+  grid-template-rows: repeat(6, 6.0rem);
   grid-auto-flow: column;
 }
 
@@ -69,15 +84,25 @@ body {
   margin-bottom: 0.4rem;
 }
 
-.beerDetails {
+.beersNoJug {
   display: grid;
-  grid-template-columns: 5.5rem minmax(10rem, 15rem) 6rem 7rem 7rem 7rem;
-  grid-template-rows: 3rem 1.6rem 2rem;
-  grid-row-gap: 0.15rem;
+  grid-template-columns: 5.5rem auto 4rem 7rem 7rem;
+  grid-template-rows: 3rem;
+  grid-auto-rows: 2.5rem;
+  grid-row-gap: 0.5rem;
   border-bottom: 2px solid #666;
 }
 
-.badge {
+.beersWithJug {
+  display: grid;
+  grid-template-columns: 5.5rem auto 4rem 7rem 7rem 7rem;
+  grid-template-rows: 3rem;
+  grid-auto-rows: 2.5rem;
+  grid-row-gap: 0.5rem;
+  border-bottom: 2px solid #666;
+}
+
+div.badge {
   display: inline-block;
   grid-column: 1;
   grid-row: 1 / -1;
@@ -85,25 +110,50 @@ body {
   justify-self: center;
 }
 
-.beerName {
-  grid-column: span 4;
-  font-weight: bold;
-  text-transform: uppercase;
-  width: 100%;
-  font-size: 40px;
-  color: #EEE;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+div.nameWithJug {
+  grid-column: span 5;
+  /*grid-column: span 4;*/
 }
 
-.brewery {
-  grid-column: 2 / span 2;
+div.nameNoJug {
+  grid-column: span 4;
+}
+.values{
+  display: inline-block;
+  text-align: right;
+  vertical-align: text-bottom;
+}
+
+div.half,
+div.handle,
+div.jug {
+  font-size: 2rem;
+  width: 7rem;
+  text-align: right;
+  color: #7C7;
+}
+
+div.half {
+  color: #4C4;
+}
+
+div.handle {
+  color: #6F6;
+}
+
+div.abv {
+  font-size: 2rem;
+  width: 4rem;
+  color: #FFC8A5;
+  text-align: right;
+}
+
+div.nameNoJug {
   flex: 0 1 auto;
   font-weight: bold;
   text-transform: uppercase;
   width: 100%;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #EEE;
   text-overflow: ellipsis;
@@ -111,78 +161,77 @@ body {
   overflow: hidden;
 }
 
-.beerStyle {
-  display: inline-block;
+div.nameWithJug {
+  flex: 0 1 auto;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #EEE;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+div.nameNoJug > span:first-child {
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #EDDED0;
+}
+
+div.nameWithJug > span:first-child {
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #EDDED0;
+}
+
+div.beerStyle {
   margin-left: 0.5rem;
   color: #FFBC79;
-  grid-column: 4 / span 3;
-  text-align: right;
+  /*flex: 1 1 auto;*/
+  padding-left: 1rem;
+  grid-column: 2;
   font-size: 1.5rem;
-  vertical-align: text-top;
-}
-
-.values{
-  display: inline-block;
-  text-align: right;
-  vertical-align: text-bottom;
-}
-
-.half,
-.handle,
-.jug {
-  font-size: 2rem;
-  width: 7rem;
-  text-align: right;
-  color: #7C7;
-}
-
-.abv {
-  grid-column: 3;
-  font-size: 2rem;
-  width: 5rem;
-  color: #FFC8A5;
-  text-align: right;
-}
-
-.half {
-  grid-column: 4;
-  color: #4C4;
-}
-
-.handle {
-  grid-column: 5;
-  color: #6F6;
-}
-
-.jug {
-  grid-column: 6;
 }
 
 .nis {
   opacity: 0.3;
 }
 
-.special-star {
+.special .nameNoJug {
   background-image: url('special.svg');
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 7rem;
-  text-shadow: 0px 0px 11px #FFAA00, 0px 0px 20px #FFAA00;
+}
+
+.special .nameWithJug {
+  background-image: url('special.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 7rem;
 }
 
 .special {
   border-bottom: 2px solid #f90;
 }
 
-.special .half,
-.special .handle,
-.special .jug {
+.special div.half,
+.special div.handle,
+.special div.jug {
   color: #fff;
   text-shadow: 0px 0px 11px #FFAA00, 0px 0px 20px #FFAA00;
 }
 
-.green-star {
-  grid-column: 6;
+.new .nameNoJug {
+  background-image: url('green-star.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 1.5rem;
+}
+
+.new .nameWithJug {
   background-image: url('green-star.svg');
   background-repeat: no-repeat;
   background-position: right center;
@@ -198,17 +247,26 @@ body {
   html {
     font-size: 0.95vw;
   }
+  body {
+    /*background-color: lightblue;*/
+  }
 }
 
 @media only screen and (min-width: 1400px)   {
   html {
     font-size: 1.1vw;
   }
+  body {
+    /*background-color: lightgreen;*/
+  }
 }
 
 @media only screen and (min-width: 1900px)   {
   html {
     font-size: 1.05vw;
+  }
+  body {
+    /*background-color: lightgray;*/
   }
 }
 

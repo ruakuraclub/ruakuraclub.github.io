@@ -9,7 +9,10 @@ function displayTaps( results ) {
   var sheet = results.data;
   $('#taplist').empty();
   for(var idx = 0; idx < 12; idx++ ) {
+    if ( idx == 5 || idx == 11 ) { continue; } // Skip taps 6 & 12.
     var tap = sheet[idx];
+    
+    if ( tap['Class'].toLowerCase() == 'nis' ) { continue; } // Skip taps not in service.
 
     if(tap['Name'] == '') { // Tap with no beer assigned
       tap['Name'] = '\xa0'; // Non-Breaking Space, ensures row heights match up
@@ -51,7 +54,6 @@ function displayTaps( results ) {
       tap[field] = '-';
     }
 
-    if(tap['Class'].toLowerCase() !== 'nis') {
       element = "<div class=\"card col-lg-4 col-md-6 col-sm-12 flex-column\">";
       element += '<div class=\"card-body\">';
       if(tap['Badge'] !== '') {
@@ -63,7 +65,6 @@ function displayTaps( results ) {
       element += '<strong>'+tap['ABV']+' ABV</strong></p>';
 
       $('#taplist').append(element);
-    }
   }
 }
 

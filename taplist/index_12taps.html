@@ -10,7 +10,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
     <!-- <link href="https://fonts.googleapis.com/css?family=Sunflower:300,500,700" rel="stylesheet"> -->
-    <link href="taplist.css" rel="stylesheet">
+    <link href="taplist_12taps.css" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js"></script>
@@ -99,12 +99,15 @@
       function displayTaps( results ) {
         var beerList = { beers: [] };
         var sheet = results.data;
+        var showJug = false;
         for(var idx = 0; idx < 12; idx++ ) {
-          if (idx == 5 || idx == 11) { continue;  } //skip 6 & 12, we're only serving 10 taps
           var tap = sheet[idx];
           if ( tap['Name'] == '' ) { // Tap with no beer assigned
-            tap['Class'] = 'nis';
-            tap['Name'] = 'Tap temporarily offline'; // Non-Breaking Space, ensures row heights match up
+            tap['Name'] = '\xa0'; // Non-Breaking Space, ensures row heights match up
+          }
+
+          if ( tap['Brewery'] != '' ) {
+            tap['Brewery'] = ' - ' + tap['Brewery'];
           }
 
           let field = 'ABV'
@@ -112,7 +115,7 @@
           if ( !isNaN(abv)) {
             tap[field] = sprintf( "%0.1f", abv) + '%';
           } else if ( tap[field] == '' ) {
-            tap[field] = ' ';
+            tap[field] = '-';
           }
 
           field = 'half-price'
@@ -120,7 +123,7 @@
           if ( !isNaN( price ) ) {
             tap[field] = "$" + sprintf( "%0.2f", price);
           } else if ( tap[field] == '' ) {
-            tap[field] = ( tap['Class'] == 'nis' ? ' ' : '-' );
+            tap[field] = '-';
           }
 
           field = 'handle-price'
@@ -128,36 +131,33 @@
           if ( !isNaN( price ) ) {
             tap[field] = "$" + sprintf( "%0.2f", price);
           } else if ( tap[field] == '' ) {
-            tap[field] = ( tap['Class'] == 'nis' ? ' ' : '-' );
+            tap[field] = '-';
           }
 
           field = 'jug-price'
           price = parseFloat( tap[field] )
           if ( !isNaN( price ) ) {
             tap[field] = "$" + sprintf( "%0.2f", price);
+            showJug = true;
           } else if ( tap[field] == '' ) {
-            tap[field] = ( tap['Class'] == 'nis' ? ' ' : '-' );
-          }
-
-          if ( tap['Class'] == 'new' ) {
-            tap['Indicator'] = 'green-star';
-          } else if ( tap['Class'] == 'special' ) {
-            tap['Indicator'] = 'special-star';
-          } else {
-            tap['Indicator'] = 'no-star';
+            tap[field] = '-';
           }
 
           beerList.beers.push( tap );
         }
-        
-        var templateHtml = document.getElementById( 'tap-template' ).innerHTML;
-        document.getElementById( "taps" ).className = "box taplist";
-       
+
+        if ( showJug ) {
+          var templateHtml = document.getElementById( 'tap-template' ).innerHTML;
+          document.getElementById( "taps" ).className = "box taplist";
+        } else {
+          document.getElementById( "taps" ).className = "box taplistNoJug";
+          var templateHtml = document.getElementById( 'tap-template-noJug' ).innerHTML;
+        }
+
         var renderedList  = Mustache.render( templateHtml, beerList );
 
         if ( document.getElementById( "taps" ).innerHTML !== renderedList ) {
           document.getElementById( "taps" ).innerHTML = renderedList;
-          resizeContents();
         }
       }
 
@@ -186,44 +186,6 @@
         setTimeout( "startTime()", 1000 )
       }
 
-      function resizeContents() {
-        // do not use font-size rem on elements with "resizable" class!
-        // do not set font-size via CSS for elements with "resizable" class!
-        var resizableDivs = document.getElementsByClassName('resizable');
-        for (index = 0; index < resizableDivs.length; ++index) {
-          var div = resizableDivs[index];
-          if (div.innerText != '') {
-            var divWidth = div.clientWidth;
-            var divHeight = div.clientHeight;
-
-            var contentWidth = div.scrollWidth;
-            var contentHeight = div.scrollHeight;
-
-            var fontSize = div.style.fontSize;
-            // trims the "px" off the font-size
-            fontSize = Number(fontSize.substring(0, fontSize.length - 2));
-
-            while (contentWidth <= divWidth && contentHeight <= divHeight) {
-              // increase font-size unless it will cause div to overflow width/height.
-              fontSize += 1;
-              div.style.fontSize = fontSize + 'px';
-              contentWidth = div.scrollWidth;
-              contentHeight = div.scrollHeight;
-            }
-
-            while (contentWidth > divWidth || contentHeight > divHeight) {
-              // shrink font-size until it fits within div width & height.
-              fontSize -= 1;
-              div.style.fontSize = fontSize + 'px';
-
-              contentWidth = div.scrollWidth;
-              contentHeight = div.scrollHeight;
-            }
-          }
-        }
-      }
-
-
       window.addEventListener( "DOMContentLoaded", init );
       // Reload the page every 60 seconds (60000 milliseconds)
       window.setInterval( function() { init() }, 60000 );
@@ -231,14 +193,14 @@
 
     <script id="tap-template" type="text/html">
       <div class="labelHeader">
-        <div class="labels">
+        <div class="labels withJug">
           <div class=""></div>
           <div class="abv">ABV</div>
           <div class="half">Half</div>
           <div class="handle">Handle</div>
           <div class="jug">Jug</div>
         </div>
-        <div class="labels">
+        <div class="labels withJug">
           <div class=""></div>
           <div class="abv">ABV</div>
           <div class="half">Half</div>
@@ -246,20 +208,49 @@
           <div class="jug">Jug</div>
         </div>
       </div>
-      <div class="theTaps">
+      <div class="tapContentsWithJug">
         {{#beers}}
-        <div class="beerDetails {{Class}}">
+        <div class="beersWithJug {{Class}}">
           <div class="badge">
             <img src="{{Badge}}">
           </div>
-          <div class="beerName resizable" style="font-size: 40px;">{{Name}}</div>
-          <div class="{{Indicator}}"></div>
-          <div class="brewery">{{Brewery}}</div>
+          <div class="nameWithJug">{{Name}}<span>{{Brewery}}</span></div>
           <div class="beerStyle">{{Style}}</div>
           <div class="values abv">{{ABV}}</div>
           <div class="values half">{{half-price}}</div>
           <div class="values handle">{{handle-price}}</div>
           <div class="values jug">{{jug-price}}</div>
+        </div>
+        {{/beers}}
+      </div>
+    </script>
+
+    <script id="tap-template-noJug" type="text/html">
+      <div class="labelHeader">
+        <div class="labels noJug">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+        </div>
+        <div class="labels noJug">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+        </div>
+      </div>
+      <div class="tapContentsNoJug">
+        {{#beers}}
+        <div class="beersNoJug {{Class}}">
+          <div class="badge">
+            <img src="{{Badge}}">
+          </div>
+          <div class="nameNoJug">{{Name}}<span>{{Brewery}}</span></div>
+          <div class="beerStyle">{{Style}}</div>
+          <div class="values abv">{{ABV}}</div>
+          <div class="values half">{{half-price}}</div>
+          <div class="values handle">{{handle-price}}</div>
         </div>
         {{/beers}}
       </div>
