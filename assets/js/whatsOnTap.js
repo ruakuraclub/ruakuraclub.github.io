@@ -9,8 +9,8 @@ function displayTaps( results ) {
   var sheet = results.data;
   $('#taplist').empty();
   for(var idx = 0; idx < 12; idx++ ) {
-    if ( idx == 5 || idx == 11 ) { continue; } // Skip taps 6 & 12.
     var tap = sheet[idx];
+    if ( tap['Class'].toLowerCase() == 'offline' ) { continue; } // Skip offline taps.
     
     if ( tap['Class'].toLowerCase() == 'nis' ) { continue; } // Skip taps not in service.
 
@@ -19,7 +19,7 @@ function displayTaps( results ) {
     }
 
     if( !tap['Badge'].includes('http') ){
-      tap['Badge'] = './taplist/'+tap['Badge'];
+      tap['Badge'] = '/taplist/'+tap['Badge'];
     }
 
     let field = 'ABV'
