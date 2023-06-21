@@ -1,3 +1,9 @@
+/* track down some small icons (font-awesome)?
+  wine glass
+  wine bottle
+  half
+  handle
+  jug */
 
 body {
   background-color: black;
@@ -27,11 +33,23 @@ body {
     "theTaps";
 }
 
+.winelist {
+  display: grid;
+  grid-area: winelist;
+  grid-template-areas:
+    "theWines";
+}
+
+.hidden {
+  display: none !important;
+}
+
 .labelHeader {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
   grid-column-gap: 1%;
   grid-template-areas: "labels" "labels";
+  padding-bottom: 0.5rem;
 }
 
 .labels {
@@ -47,19 +65,55 @@ body {
   grid-template-columns: 49.5% 49.5%;
   grid-template-areas: "beerDetails" "beerDetails";
   grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
-  grid-template-rows: repeat(5, 7.4rem);
+  grid-row-gap: 1rem;
+  grid-template-rows: repeat(4, 8rem);
+  grid-auto-flow: row;
+  padding-top: 1rem;
+}
+
+.theWines {
+  display: grid;
+  grid-template-columns: 49.5% 49.5%;
+  grid-template-areas: "wineDetails" "wineDetails";
+  grid-column-gap: 1%;
+  grid-row-gap: 0.4rem;
+  grid-template-rows: repeat(9, 4rem);
   grid-auto-flow: column;
 }
 
-.theTapsTwelve {
+.wineDetails {
   display: grid;
-  grid-template-columns: 49.5% 49.5%;
-  grid-template-areas: "beerDetails" "beerDetails";
-  grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
-  grid-template-rows: repeat(6, 7rem);
-  grid-auto-flow: column;
+  grid-template-columns: auto 7rem 7rem;
+  grid-template-rows: 3rem;
+  grid-row-gap: 0.15rem;
+  border-bottom: 2px solid #666;
+}
+
+.wineLabel {
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 40px;
+  color: hsl(180, 100%, 50%);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wine {
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 40px;
+  color: #EEE;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wineGlass .wineBottle {
+  font-size: 30px;
+  color: #EEE;
 }
 
 .badge img {
@@ -218,8 +272,8 @@ body {
   grid-template-columns: 15% auto 15%;
   grid-template-areas: "logo title clock";
   background-color: black;
-  /*grid-template-rows: 141px;*/
-  grid-template-rows: 130px;
+  grid-template-rows: 141px;
+  /* grid-template-rows: 110px; */
   padding-bottom: 0rem;
 }
 
@@ -236,7 +290,7 @@ body {
 }
 
 .title > h1 {
-  font-size: 4.5rem;
+  font-size: 4rem;
   /*font-family: 'Gruppo', cursive;*/
   display: inline-block;
   text-align: center;
@@ -250,7 +304,7 @@ body {
   font-size: 3rem;
   text-align: right;
   margin: 0;
-  padding-top: 40px;
+  padding-top: 15px;
 }
 
 .footer {

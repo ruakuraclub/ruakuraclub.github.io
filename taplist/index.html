@@ -27,17 +27,32 @@
           </div>
         <div id="clock" class="clock"></div>
       </div>
-      <div id="taps" class="box taplist">
-      </div>
+      <div id="taps" class="box taplist"></div>
+      <!-- <div id="wines" class="box winelist"></div> -->
+      <div id="footer" class="box footer"><!-- footer placed here by headerFooter function --></div>
     </div>
-    <div class="box footer" id="footer"><!-- ...placeholder, this should replace with message text... --></div>
+    
     <script type="text/javascript">
-      var taplistURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=0&single=true&output=csv";
       var messagesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=751801606&single=true&output=csv";
-
+      var taplistURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=0&single=true&output=csv";
+      var winesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=473881078&single=true&output=csv";
+      
       function init() {
         Papa.parse( messagesURL, { download: true, header: true, complete: headerFooter } );
         Papa.parse( taplistURL, { download: true, header: true, complete: displayTaps } );
+        // Papa.parse( winesURL, { download: true, header: true, complete: displayWines } );
+      }
+
+      function flip(){
+        var beersDiv = document.getElementById('taps');
+        var winesDiv = document.getElementById('wines');
+        if ( beersDiv.classList.contains('hidden') ) {
+          winesDiv.classList.add('hidden');
+          beersDiv.classList.remove('hidden');
+        }else{
+          winesDiv.classList.remove('hidden');
+          beersDiv.classList.add('hidden');
+        }
       }
 
       function headerFooter( results ) {
@@ -99,16 +114,19 @@
       function displayTaps( results ) {
         var beerList = { beers: [] };
         var sheet = results.data;
+
+        // sheet = sheet.filter( entries => ( (entries.Class).toLowerCase() !== 'offline' ) );
         for(var idx = 0; idx < 12; idx++ ) {
-          if (idx == 5 || idx == 11) { continue;  } //skip 6 & 12, we're only serving 10 taps
           var tap = sheet[idx];
+          if ( tap['Class'] == 'offline' ) { continue; } // Skip offline taps.
+
           if ( tap['Name'] == '' ) { // Tap with no beer assigned
             tap['Class'] = 'nis';
             tap['Name'] = 'Tap temporarily offline'; // Non-Breaking Space, ensures row heights match up
           }
 
-          let field = 'ABV'
-          let abv = parseFloat(tap[field] )
+          var field = 'ABV'
+          var abv = parseFloat(tap[field] )
           if ( !isNaN(abv)) {
             tap[field] = sprintf( "%0.1f", abv) + '%';
           } else if ( tap[field] == '' ) {
@@ -116,7 +134,7 @@
           }
 
           field = 'half-price'
-          let price = parseFloat( tap[field] )
+          var price = parseFloat( tap[field] )
           if ( !isNaN( price ) ) {
             tap[field] = "$" + sprintf( "%0.2f", price);
           } else if ( tap[field] == '' ) {
@@ -160,6 +178,107 @@
           resizeContents();
         }
       }
+
+      // function displayWines( results ) {
+      //   var wineList = { wines: [] };
+      //   var sheet = results.data;
+
+      //   for (var idx = 0; idx < sheet.length; idx++){
+      //     var wine = sheet[idx];
+      //     if (wine['Glass_150ml'] !== '') {
+      //       var price = parseFloat( wine['Glass_150ml'] )
+      //       wine['Glass_150ml'] = "$" + sprintf( "%0.2f", price);
+      //     }
+      //     if (wine['Bottle_200ml'] !== '') {
+      //       var price = parseFloat( wine['Bottle_200ml'] )
+      //       wine['Bottle_200ml'] = "$" + sprintf( "%0.2f", price);
+      //     }
+      //     if (wine['Bottle_750ml'] !== '') {
+      //       var price = parseFloat( wine['Bottle_750ml'] )
+      //       wine['Bottle_750ml'] = "$" + sprintf( "%0.2f", price);
+      //     }
+      //   }
+        
+      //   var whites = sheet.filter( entries => ( entries.Style == 'White' ) );
+      //   var reds = sheet.filter( entries => ( entries.Style == 'Red' ) );
+      //   var rose = sheet.filter( entries => ( entries.Style == 'Rosé' ) );
+      //   var sparkling = sheet.filter( entries => ( entries.Style == 'Sparkling' ) );
+
+      //   if ( whites.length > 0 ) {
+      //     var wine = [];
+      //     wine['Name'] = "White Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "150ml";
+      //     wine['bottle'] = "750ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < whites.length; idx++ ) {
+      //     var wine = whites[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = wine['Glass_150ml'];
+      //     wine['bottle'] = wine['Bottle_750ml'];          
+      //     wineList.wines.push( wine );
+      //   }
+
+      //   if ( rose.length > 0 ) {
+      //     var wine = [];
+      //     wine['Name'] = "Rosé Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "150ml";
+      //     wine['bottle'] = "750ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < rose.length; idx++ ) {
+      //     var wine = rose[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = wine['Glass_150ml'];
+      //     wine['bottle'] = wine['Bottle_750ml'];          
+      //     wineList.wines.push( wine );
+      //   }
+
+      //   if ( reds.length > 0 ) {
+      //     var wine = [];
+      //     wine['Name'] = "Red Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "150ml";
+      //     wine['bottle'] = "750ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < reds.length; idx++ ) {
+      //     var wine = reds[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = wine['Glass_150ml'];
+      //     wine['bottle'] = wine['Bottle_750ml'];          
+      //     wineList.wines.push( wine );
+      //   }
+        
+      //   if ( sparkling.length > 0 ) {
+      //     var wine = [];
+      //     wine['class'] = "wine";
+      //     wine['Name'] = "Sparkling Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "";
+      //     wine['bottle'] = "200ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < sparkling.length; idx++ ) {
+      //     var wine = sparkling[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = "";
+      //     wine['bottle'] = wine['Bottle_200ml'];
+      //     wineList.wines.push( wine );
+      //   }
+
+      //   var templateHtml = document.getElementById( 'wine-template' ).innerHTML;
+      //   document.getElementById( "wines" ).className = "hidden box winelist";
+       
+      //   var renderedList  = Mustache.render( templateHtml, wineList );
+
+      //   if ( document.getElementById( "wines" ).innerHTML !== renderedList ) {
+      //     document.getElementById( "wines" ).innerHTML = renderedList;
+      //     resizeContents();
+      //   }
+      // }
 
       function startTime(){
         var time = new Date()
@@ -223,10 +342,13 @@
         }
       }
 
-
+      // Reload the page every 120 seconds (120000 milliseconds)
       window.addEventListener( "DOMContentLoaded", init );
-      // Reload the page every 60 seconds (60000 milliseconds)
-      window.setInterval( function() { init() }, 60000 );
+      window.setInterval( function() { init() }, 120000 );
+
+      // Flip from beers to wine list and back every 20 seconds
+      // window.addEventListener( "DOMContentLoaded", flip() );
+      // window.setInterval( function() { flip() }, 20000 );
     </script>
 
     <script id="tap-template" type="text/html">
@@ -264,6 +386,18 @@
         {{/beers}}
       </div>
     </script>
+    <!-- <script id="wine-template" type="text/html">
+      <div class="theWines">
+        {{#wines}}
+        <div class="wineDetails {{class}}">
+          <div class="resizable" style="font-size: 40px;">{{Name}}</div>
+          <div class="wineGlass">{{glass}}</div>
+          <div class="wineBottle">{{bottle}}</div>
+        </div>
+        {{/wines}}
+      </div>
+    </script> -->
+
 
   </body>
 </html>
