@@ -237,16 +237,64 @@ body {
 
 .green-star {
   grid-column: 6;
-  background-image: url('green-star.svg');
+  /* background-image: url('green-star.svg'); */
+  background-image: url('/taplist/assets/images/serving.png');
   background-repeat: no-repeat;
   background-position: right center;
-  background-size: 1.5rem;
+  background-size: 2.6rem;
+}
+
+.low-keg {
+  grid-column: 6;
+  /* background-image: url('green-star.svg'); */
+  background-image: url('/taplist/assets/images/low.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 2.6rem;
 }
 
 .new {
   border-bottom: 2px solid #6F6;
+  /* border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 30%, rgb(0, 255, 0) 30% 100%);
+  border-image-slice: 1;
+  width:100%; */
 }
 
+.full {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(0, 255, 0) 0% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.seventy {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 30%, rgb(0, 255, 0) 30% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.fifty {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 50%, rgb(0, 255, 0) 50% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.thirty {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 70%, rgb(0, 255, 0) 70% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.fifteen {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 85%, rgb(0, 255, 0) 85% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
 
 @media only screen and (min-width: 1200px)  {
   html {

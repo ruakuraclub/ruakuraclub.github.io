@@ -125,6 +125,23 @@
             tap['Name'] = 'Tap temporarily offline'; // Non-Breaking Space, ensures row heights match up
           }
 
+          if ( Number.parseFloat(tap['left']) ) {
+            var volumeRemaining = Number.parseFloat(tap['left']);
+            if (volumeRemaining <= 15) {
+              tap['gradientClass'] = 'fifteen';
+            } else if ( volumeRemaining > 15 && volumeRemaining <= 30) {
+              tap['gradientClass'] = 'thirty';
+            } else if ( volumeRemaining > 30 && volumeRemaining <= 50) {
+              tap['gradientClass'] = 'fifty';
+            } else if ( volumeRemaining > 50 && volumeRemaining <= 70) {
+              tap['gradientClass'] = 'seventy';
+            } else if ( volumeRemaining > 70 ) {
+              tap['gradientClass'] = 'full';
+            } else {
+              tap['gradientClass'] = '';
+            }
+          }
+
           var field = 'ABV'
           var abv = parseFloat(tap[field] )
           if ( !isNaN(abv)) {
@@ -161,6 +178,8 @@
             tap['Indicator'] = 'green-star';
           } else if ( tap['Class'] == 'special' ) {
             tap['Indicator'] = 'special-star';
+          } else if ( tap['Class'] == 'low' ) {
+            tap['Indicator'] = 'low-keg';
           } else {
             tap['Indicator'] = 'no-star';
           }
@@ -370,7 +389,7 @@
       </div>
       <div class="theTaps">
         {{#beers}}
-        <div class="beerDetails {{Class}}">
+        <div class="beerDetails {{Class}} {{gradientClass}}">
           <div class="badge">
             <img src="{{Badge}}">
           </div>
