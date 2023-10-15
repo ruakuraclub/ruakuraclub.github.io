@@ -1,0 +1,383 @@
+
+body {
+    background-color: black;
+    font-family: 'Roboto Condensed', sans-serif;
+    /*font-family: 'Sunflower', sans-serif;*/
+    color: white;
+    margin: 0.5rem;
+  }
+  
+  .box {
+    padding: 0.5rem;
+  }
+  
+  .container {
+    display: grid;
+    grid-template-areas:
+      "header"
+      "taplist"
+      "footer";
+  }
+  
+  .header {
+    display: grid;
+    grid-area: header;
+    grid-template-columns: 15% auto 15%;
+    grid-template-areas: "logo title clock";
+    background-color: black;
+    /*grid-template-rows: 141px;*/
+    grid-template-rows: 130px;
+    padding-bottom: 0rem;
+  }
+  
+  .logo {
+    width:180px; /* width of your image */
+    height:141px; /* height of your image */
+    background-image:url('/static/images/club_logo_small.png');
+    margin: 0;
+    padding: 0;
+  }
+  
+  .title {
+    text-align: center;
+  }
+  
+  .title > h1 {
+    font-size: 4.5rem;
+    /*font-family: 'Gruppo', cursive;*/
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+    margin: 10px 0 0 0;
+  }
+  
+  .clock {
+    color: #0B9444;
+    font-size: 3rem;
+    text-align: right;
+    margin: 0;
+    padding-top: 40px;
+  }
+
+  .taplist {
+    display: grid;
+    grid-area: taplist;
+    grid-template-areas:
+      "labelHeader"
+      "tapContentsWithJug";
+  }
+  
+  .taplistNoJug {
+    display: grid;
+    grid-area: taplist;
+    grid-template-areas:
+      "labelHeader"
+      "tapContentsNoJug";
+  }
+  
+  .labelHeader {
+    display: grid;
+    grid-template-columns: 49.5% 49.5%;
+    grid-column-gap: 1%;
+    grid-template-areas: "labels" "labels";
+  }
+  
+  .withJug {
+    grid-template-columns: auto 4rem 7rem 7rem 7rem;
+  }
+  
+  .noJug {
+    grid-template-columns: auto 4rem 7rem 7rem;
+  }
+  
+  .labels {
+    display: grid;
+    text-align: right;
+    font-weight: normal;
+    border-bottom: 2px solid #666;
+  }
+  
+  .tapContentsWithJug {
+    display: grid;
+    grid-template-columns: 49.5% 49.5%;
+    grid-template-areas: "beersWithJug" "beersWithJug";
+    grid-column-gap: 1%;
+    grid-row-gap: 0.25rem;
+    grid-template-rows: repeat(6, 6.0rem);
+    grid-auto-flow: column;
+  }
+  
+  .tapContentsNoJug {
+    display: grid;
+    grid-template-columns: 49.5% 49.5%;
+    grid-template-areas: "beersNoJug" "beersNoJug";
+    grid-column-gap: 1%;
+    grid-row-gap: 0.25rem;
+    grid-template-rows: repeat(6, 6.0rem);
+    grid-auto-flow: column;
+  }
+  
+  .badge img {
+    max-width: 5rem;
+    max-height: 5rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .beersNoJug {
+    display: grid;
+    grid-template-columns: 5.5rem auto 4rem 7rem 7rem;
+    grid-template-rows: 3rem;
+    grid-auto-rows: 2.5rem;
+    grid-row-gap: 0.5rem;
+    border-bottom: 2px solid #666;
+  }
+  
+  .beersWithJug {
+    display: grid;
+    grid-template-columns: 5.5rem auto 4rem 7rem 7rem 7rem;
+    grid-template-rows: 3rem;
+    grid-auto-rows: 2.5rem;
+    grid-row-gap: 0.5rem;
+    border-bottom: 2px solid #666;
+  }
+  
+  div.badge {
+    display: inline-block;
+    grid-column: 1;
+    grid-row: 1 / -1;
+    vertical-align: middle;
+    justify-self: center;
+  }
+  
+  div.nameWithJug {
+    grid-column: span 5;
+    /*grid-column: span 4;*/
+  }
+  
+  div.nameNoJug {
+    grid-column: span 4;
+  }
+  .values{
+    display: inline-block;
+    text-align: right;
+    vertical-align: text-bottom;
+  }
+  
+  div.half,
+  div.handle,
+  div.jug {
+    font-size: 2rem;
+    width: 7rem;
+    text-align: right;
+    color: #7C7;
+  }
+  
+  div.half {
+    color: #4C4;
+  }
+  
+  div.handle {
+    color: #6F6;
+  }
+  
+  div.abv {
+    font-size: 2rem;
+    width: 4rem;
+    color: #FFC8A5;
+    text-align: right;
+  }
+  
+  div.nameNoJug {
+    flex: 0 1 auto;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #EEE;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  div.nameWithJug {
+    flex: 0 1 auto;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #EEE;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  div.nameNoJug > span:first-child {
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: #EDDED0;
+  }
+  
+  div.nameWithJug > span:first-child {
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: #EDDED0;
+  }
+  
+  div.beerStyle {
+    margin-left: 0.5rem;
+    color: #FFBC79;
+    /*flex: 1 1 auto;*/
+    padding-left: 1rem;
+    grid-column: 2;
+    font-size: 1.5rem;
+  }
+  
+  .nis {
+    opacity: 0.3;
+  }
+  
+  .special .nameNoJug {
+    background-image: url('../images/special.svg');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 7rem;
+  }
+  
+  .special .nameWithJug {
+    background-image: url('../images/special.svg');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 7rem;
+  }
+  
+  .special {
+    border-bottom: 2px solid #f90;
+  }
+  
+  .special div.half,
+  .special div.handle,
+  .special div.jug {
+    color: #fff;
+    text-shadow: 0px 0px 11px #FFAA00, 0px 0px 20px #FFAA00;
+  }
+  
+  .new .nameNoJug {
+    /* background-image: url('../images/green-star.svg'); */
+    background-image: url('../images/new.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 1.5rem;
+  }
+  
+  .new .nameWithJug {
+    /* background-image: url('../images/green-star.svg'); */
+    background-image: url('../images/new.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 1.5rem;
+  }
+  
+  .new {
+    border-bottom: 2px solid #6F6;
+  }
+  
+  
+  @media only screen and (min-width: 1200px)  {
+    html {
+      font-size: 0.95vw;
+    }
+  }
+  
+  @media only screen and (min-width: 1400px)   {
+    html {
+      font-size: 1.1vw;
+    }
+  }
+  
+  @media only screen and (min-width: 1900px)   {
+    html {
+      font-size: 1.05vw;
+    }
+  }
+  
+  .footer {
+    display: grid;
+    grid-template-columns: 98vw;
+    margin-right: 5rem;
+    grid-area: footer;
+    position: absolute;
+    bottom: 0;
+    height: auto;
+  }
+  
+  .footer span {
+    padding: 0.2rem 0;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    /*vertical-align: middle;*/
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .marquee {
+    width: 98%;
+    /*line-height: 1px;*/
+    /*background-color: red;*/
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0rem;
+  }
+  .singlefooter {
+    display: inline;
+    line-height: 1px;
+    text-align: center;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 0rem;
+  }
+  .marquee span {
+    display: inline-block;
+    padding: 0.2rem 0;
+    padding-bottom: 0rem;
+    padding-left: 100%; /* causes it to start on the right */
+    will-change: transform;
+    animation: marquee 30s linear infinite;
+    text-align: end;
+    vertical-align: bottom;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  mark.fade {
+    text-align: top;
+    color: gray;
+    background: none;
+  }
+  @keyframes marquee {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      white-space: normal
+    }
+    .marquee span {
+      animation-iteration-count: 1;
+      animation-duration: 0.01;
+      /* instead of animation: none, so an animation end event is
+       * still available, if previously attached.
+       */
+      padding-left: 0;
+    }
+  }
