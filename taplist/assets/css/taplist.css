@@ -291,7 +291,14 @@ body {
 
 .fifteen {
   border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, grey 85%, rgb(0, 255, 0) 85% 100%);
+  border-image: linear-gradient(to right, grey 85%, rgb(255, 165, 0) 85% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.empty {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 85%, rgb(255, 0, 0) 95% 100%);
   border-image-slice: 1;
   width:100%;
 }

@@ -131,7 +131,9 @@
 
           if ( Number.parseFloat(tap['left']) ) {
             var volumeRemaining = Number.parseFloat(tap['left']);
-            if (volumeRemaining <= 15) {
+            if (volumeRemaining < 5) {
+              tap['gradientClass'] = 'empty';
+            } else if (volumeRemaining <= 15) {
               tap['gradientClass'] = 'fifteen';
             } else if ( volumeRemaining > 15 && volumeRemaining <= 30) {
               tap['gradientClass'] = 'thirty';

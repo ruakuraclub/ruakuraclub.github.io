@@ -22,6 +22,25 @@ function displayTaps( results ) {
       tap['Badge'] = 'https://taplist.ruakura-club.co.nz/assets/badges/'+tap['Badge'];
     }
 
+    if ( Number.parseFloat(tap['left']) ) {
+      var volumeRemaining = Number.parseFloat(tap['left']);
+      if (volumeRemaining < 5) {
+        tap['gradientClass'] = 'empty';
+      } else if (volumeRemaining <= 15) {
+        tap['gradientClass'] = 'fifteen';
+      } else if ( volumeRemaining > 15 && volumeRemaining <= 30) {
+        tap['gradientClass'] = 'thirty';
+      } else if ( volumeRemaining > 30 && volumeRemaining <= 50) {
+        tap['gradientClass'] = 'fifty';
+      } else if ( volumeRemaining > 50 && volumeRemaining <= 70) {
+        tap['gradientClass'] = 'seventy';
+      } else if ( volumeRemaining > 70 ) {
+        tap['gradientClass'] = 'full';
+      } else {
+        tap['gradientClass'] = '';
+      }
+    }
+
     let field = 'ABV'
     let abv = parseFloat(tap[field])
     if(!isNaN(abv)) {
@@ -55,7 +74,7 @@ function displayTaps( results ) {
     }
 
       element = "<div class=\"card col-lg-4 col-md-6 col-sm-12 flex-column\">";
-      element += '<div class=\"card-body\">';
+      element += '<div class=\"card-body ' +tap['gradientClass'] + '\">';
       if(tap['Badge'] !== '') {
         element += '<img class=\"float-left\" src=\"'+tap["Badge"]+'\"></img>';
       }

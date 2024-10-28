@@ -55,3 +55,45 @@ div.tooltip-inner {
 #taplist .card-subtitle {
   font-size: 1.1rem;
 }
+
+.full {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(39, 168, 39) 0% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.seventy {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(131, 131, 131) 30%, rgb(39, 168, 39) 30% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.fifty {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(131, 131, 131) 50%, rgb(39, 168, 39) 50% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.thirty {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(131, 131, 131) 70%, rgb(39, 168, 39) 70% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.fifteen {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(131, 131, 131) 85%, rgb(230, 174, 71) 85% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
+
+.empty {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, rgb(131, 131, 131) 85%, rgb(124, 18, 18) 95% 100%);
+  border-image-slice: 1;
+  width:100%;
+}
