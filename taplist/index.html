@@ -9,11 +9,11 @@
     <title>RCC Tap List</title>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
-    <!-- <link href="https://fonts.googleapis.com/css?family=Sunflower:300,500,700" rel="stylesheet"> -->
 
-    <!-- Xmas Changes -->
+    <!-- Xmas Changes
     <link type="text/css" href="/assets/css/xmas.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Mountains+of+Christmas" rel="stylesheet">
+     -->
 
     <link href="/assets/css/taplist.css" rel="stylesheet">
 
@@ -24,6 +24,7 @@
   </head>
 
   <body onload="startTime()">
+    <!-- xmas lights
     <ul id="wire">
       <li></li>
       <li></li>
@@ -62,9 +63,14 @@
       <li></li>
       <li></li>
     </ul>
+   end xmas lights -->
+
     <div class="container">
       <div class="box header">
-        <div class="logo"></div>
+        <!-- xmas changes
+	  <div class="logo_santa"></div>
+        -->
+	  <div class="logo"></div>
           <div class="title">
             <h1 id="title">Loading...</h1>
           </div>
@@ -72,7 +78,14 @@
       </div>
       <div id="taps" class="box taplist"></div>
       <!-- <div id="wines" class="box winelist"></div> -->
-      <div id="footer" class="box footer"><!-- footer placed here by headerFooter function --></div>
+      <div id="footer" class="box footer"><!-- footer placed here by headerFooter function -->
+        <div id="footer-content" class="footer-content">
+          <p class="marquee"><span id="footerScroll" style="animation: 90s linear 0s infinite normal none running marquee;">ruakura-club.co.nz&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;Keep an eye on our website for weekly updates!&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;ruakura-club.co.nz&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;Keep an eye on our website for weekly updates!</span></p>
+          <a id="fortune-wheel-btn" href="https://spin.ruakura-club.co.nz">
+            <img src="/assets/images/fortune-wheel.png" alt="Spin the Wheel" width="64" height="64" style="vertical-align: middle;filter: invert(1) brightness(0.2) grayscale(1);" />
+          </a>
+        </div>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -143,8 +156,13 @@
             // no scroll if there's only one item.
             footerMessage = '<p class="singlefooter">' + footerMessage + '</p>';
           }
+          var spinButton = '<a id="fortune-wheel-btn" href="https://spin.ruakura-club.co.nz">';
+          spinButton = spinButton + '<img src="/assets/images/fortune-wheel.png" alt="Spin the Wheel" width="64" height="64" style="vertical-align: middle;filter: invert(1) brightness(0.2) grayscale(1);" />';
+          spinButton = spinButton + '</a>';
+          footerMessage = '<span>' + footerMessage + spinButton + '</span>';
+
           // set the footer element!
-          document.getElementById( "footer" ).innerHTML = footerMessage;
+          document.getElementById( "footer-content" ).innerHTML = footerMessage;
           if ( document.getElementById( "footerScroll" ) ) {
             // calculate the speed of the scroll using a ratio that allows for full-width message to take 30sec to scroll.
             // this will mean minimum 30secs for short messages, but all messages move at same visual speed.

@@ -1,3 +1,9 @@
+/* track down some small icons (font-awesome)?
+  wine glass
+  wine bottle
+  half
+  handle
+  jug */
 
 body {
   background-color: black;
@@ -43,6 +49,7 @@ body {
   grid-template-columns: 49.5% 49.5%;
   grid-column-gap: 1%;
   grid-template-areas: "labels" "labels";
+  padding-bottom: 0.5rem;
 }
 
 .labels {
@@ -53,8 +60,7 @@ body {
   grid-template-columns: 5.5rem minmax(10rem, 15rem) 6rem 7rem 7rem 7rem;
 }
 
-
-.theTapsEight {
+.theTaps {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
   grid-template-areas: "beerDetails" "beerDetails";
@@ -65,25 +71,49 @@ body {
   padding-top: 1rem;
 }
 
-/* Ten Taps */
-.theTaps {
+.theWines {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
-  grid-template-areas: "beerDetails" "beerDetails";
+  grid-template-areas: "wineDetails" "wineDetails";
   grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
-  grid-template-rows: repeat(5, 7.4rem);
+  grid-row-gap: 0.4rem;
+  grid-template-rows: repeat(9, 4rem);
   grid-auto-flow: column;
 }
 
-.theTapsTwelve {
+.wineDetails {
   display: grid;
-  grid-template-columns: 49.5% 49.5%;
-  grid-template-areas: "beerDetails" "beerDetails";
-  grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
-  grid-template-rows: repeat(6, 7rem);
-  grid-auto-flow: column;
+  grid-template-columns: auto 7rem 7rem;
+  grid-template-rows: 3rem;
+  grid-row-gap: 0.15rem;
+  border-bottom: 2px solid #666;
+}
+
+.wineLabel {
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 40px;
+  color: hsl(180, 100%, 50%);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wine {
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 100%;
+  font-size: 40px;
+  color: #EEE;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wineGlass .wineBottle {
+  font-size: 30px;
+  color: #EEE;
 }
 
 .badge img {
@@ -187,7 +217,7 @@ body {
 }
 
 .special-star {
-  background-image: url('special.svg');
+  background-image: url('/assets/images/special.svg');
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 7rem;
@@ -207,14 +237,28 @@ body {
 
 .green-star {
   grid-column: 6;
-  background-image: url('green-star.svg');
+  /* background-image: url('green-star.svg'); */
+  background-image: url('/assets/images/serving.png');
   background-repeat: no-repeat;
   background-position: right center;
-  background-size: 1.5rem;
+  background-size: 2.6rem;
+}
+
+.low-keg {
+  grid-column: 6;
+  /* background-image: url('green-star.svg'); */
+  background-image: url('/assets/images/low.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 2.6rem;
 }
 
 .new {
   border-bottom: 2px solid #6F6;
+  /* border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, grey 30%, rgb(0, 255, 0) 30% 100%);
+  border-image-slice: 1;
+  width:100%; */
 }
 
 .full {
@@ -283,8 +327,8 @@ body {
   grid-template-columns: 15% auto 15%;
   grid-template-areas: "logo title clock";
   background-color: black;
-  /*grid-template-rows: 141px;*/
-  grid-template-rows: 130px;
+  grid-template-rows: 141px;
+  /* grid-template-rows: 110px; */
   padding-bottom: 0rem;
 }
 
@@ -301,7 +345,7 @@ body {
 }
 
 .title > h1 {
-  font-size: 4.5rem;
+  font-size: 4rem;
   /*font-family: 'Gruppo', cursive;*/
   display: inline-block;
   text-align: center;
@@ -315,26 +359,24 @@ body {
   font-size: 3rem;
   text-align: right;
   margin: 0;
-  padding-top: 40px;
+  padding-top: 15px;
 }
 
-
 .footer {
-  display: flex;
+  display: grid;
+  grid-template-columns: 98vw;
+  margin-right: 5rem;
   grid-area: footer;
   position: absolute;
   bottom: 0;
   height: auto;
-  width: 98vw;
 }
 
 .footer span {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
   padding: 0.2rem 0;
   color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
   text-align: center;
   /*vertical-align: middle;*/
   font-family: 'Roboto Condensed', sans-serif;
@@ -343,8 +385,7 @@ body {
 }
 
 .marquee {
-  width: auto;
-  flex: 1;
+  width: 98%;
   /*line-height: 1px;*/
   /*background-color: red;*/
   color: white;
@@ -352,9 +393,6 @@ body {
   overflow: hidden;
   box-sizing: border-box;
   padding: 0rem;
-  margin: 0;
-  display: flex;
-  align-items: center;
 }
 .singlefooter {
   display: inline;
@@ -383,22 +421,6 @@ mark.fade {
   color: gray;
   background: none;
 }
-
-.footer-content a,
-.footer a {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-}
-
-.footer-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-}
-
 @keyframes marquee {
   0%   { transform: translate(0, 0); }
   100% { transform: translate(-100%, 0); }
