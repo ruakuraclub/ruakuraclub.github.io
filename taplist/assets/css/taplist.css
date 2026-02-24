@@ -8,7 +8,7 @@ body {
 }
 
 .box {
-  padding: 0.5rem;
+  padding: 0.1rem;
 }
 
 .container {
@@ -38,11 +38,21 @@ body {
   display: none !important;
 }
 
+/* Eight or Ten Taps */
 .labelHeader {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
   grid-column-gap: 1%;
   grid-template-areas: "labels" "labels";
+  margin-top: 2rem;
+}
+
+/* Twelve Taps */
+.labelHeaderTwelve {
+  display: grid;
+  grid-template-columns: 49.5% 49.5%;
+  grid-column-gap: 1%;
+  grid-template-areas: "labels" "labels";  
 }
 
 .labels {
@@ -71,7 +81,7 @@ body {
   grid-template-columns: 49.5% 49.5%;
   grid-template-areas: "beerDetails" "beerDetails";
   grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
+  grid-row-gap: 0.6rem;
   grid-template-rows: repeat(5, 7.4rem);
   grid-auto-flow: column;
 }
@@ -81,7 +91,7 @@ body {
   grid-template-columns: 49.5% 49.5%;
   grid-template-areas: "beerDetails" "beerDetails";
   grid-column-gap: 1%;
-  grid-row-gap: 0.2rem;
+  grid-row-gap: 0.1rem;
   grid-template-rows: repeat(6, 7rem);
   grid-auto-flow: column;
 }
@@ -187,7 +197,7 @@ body {
 }
 
 .special-star {
-  background-image: url('special.svg');
+  background-image: url('/assets/images/special.svg');
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 7rem;
@@ -207,7 +217,7 @@ body {
 
 .green-star {
   grid-column: 6;
-  background-image: url('green-star.svg');
+  background-image: url('/assets/images/green-star.svg');
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 1.5rem;
@@ -284,7 +294,8 @@ body {
   grid-template-areas: "logo title clock";
   background-color: black;
   /*grid-template-rows: 141px;*/
-  grid-template-rows: 130px;
+  /* grid-template-rows: 130px; */
+  grid-template-rows: 100px;
   padding-bottom: 0rem;
 }
 
@@ -298,6 +309,9 @@ body {
 
 .title {
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .title > h1 {
@@ -315,7 +329,7 @@ body {
   font-size: 3rem;
   text-align: right;
   margin: 0;
-  padding-top: 40px;
+  padding-top: 30px;
 }
 
 

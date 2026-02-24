@@ -82,7 +82,7 @@
         <div id="footer-content" class="footer-content">
           <p class="marquee"><span id="footerScroll" style="animation: 90s linear 0s infinite normal none running marquee;">ruakura-club.co.nz&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;Keep an eye on our website for weekly updates!&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;ruakura-club.co.nz&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;Keep an eye on our website for weekly updates!</span></p>
           <a id="fortune-wheel-btn" href="https://spin.ruakura-club.co.nz">
-            <img src="/assets/images/fortune-wheel.png" alt="Spin the Wheel" width="64" height="64" style="vertical-align: middle;filter: invert(1) brightness(0.2) grayscale(1);" />
+            <img src="/assets/images/fortune-wheel.png" alt="Spin the Wheel" width="50" height="50" style="filter: invert(1) brightness(0.2) grayscale(1);" />
           </a>
         </div>
       </div>
@@ -157,9 +157,9 @@
             footerMessage = '<p class="singlefooter">' + footerMessage + '</p>';
           }
           var spinButton = '<a id="fortune-wheel-btn" href="https://spin.ruakura-club.co.nz">';
-          spinButton = spinButton + '<img src="/assets/images/fortune-wheel.png" alt="Spin the Wheel" width="64" height="64" style="vertical-align: middle;filter: invert(1) brightness(0.2) grayscale(1);" />';
+          spinButton = spinButton + '<img src="/assets/images/fortune-wheel.png" alt="Spin the Wheel" width="50" height="50" style="filter: invert(1) brightness(0.08) grayscale(1);" />';
           spinButton = spinButton + '</a>';
-          footerMessage = '<span>' + footerMessage + spinButton + '</span>';
+          footerMessage = footerMessage + spinButton;
 
           // set the footer element!
           document.getElementById( "footer-content" ).innerHTML = footerMessage;
@@ -257,10 +257,21 @@
         var templateHtml = document.getElementById( 'tap-template' ).innerHTML;
         document.getElementById( "taps" ).className = "box taplist";
 
+         // Determine CSS class based on number of displayed taps
+        var tapCount = beerList.beers.length;
+        var tapGridClass = 'theTaps'; // default: 9-10 taps
+        if ( tapCount <= 8 ) {
+          tapGridClass = 'theTapsEight';
+        } else if ( tapCount >= 11 ) {
+          tapGridClass = 'theTapsTwelve';
+          document.getElementsByClassName( "labelHeader" )[0].className = "labelHeaderTwelve";
+        }
+        
         var renderedList  = Mustache.render( templateHtml, beerList );
 
         if ( document.getElementById( "taps" ).innerHTML !== renderedList ) {
           document.getElementById( "taps" ).innerHTML = renderedList;
+          document.getElementById( "theBeers" ).className = tapGridClass;
           resizeContents();
         }
       }
@@ -454,7 +465,7 @@
           <div class="jug">Jug</div>
         </div>
       </div>
-      <div class="theTaps">
+      <div id="theBeers" class="theTaps">
         {{#beers}}
         <div class="beerDetails {{Class}} {{gradientClass}}">
           <div class="badge">
