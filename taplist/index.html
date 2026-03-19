@@ -264,7 +264,7 @@
           tapGridClass = 'theTapsEight';
         } else if ( tapCount >= 11 ) {
           tapGridClass = 'theTapsTwelve';
-          document.getElementsByClassName( "labelHeader" )[0].className = "labelHeaderTwelve";
+          document.getElementById( "labelHeader" )[0].className = "labelHeaderTwelve";
         }
         
         var renderedList  = Mustache.render( templateHtml, beerList );
@@ -449,7 +449,7 @@
     </script>
 
     <script id="tap-template" type="text/html">
-      <div class="labelHeader">
+      <div id="labelHeader" class="labelHeader">
         <div class="labels">
           <div class=""></div>
           <div class="abv">ABV</div>
