@@ -260,20 +260,23 @@
          // Determine CSS class based on number of displayed taps
         var tapCount = beerList.beers.length;
         var tapGridClass = 'theTaps'; // default: 9-10 taps
-        if ( tapCount <= 8 ) {
-          tapGridClass = 'theTapsEight';
-        } else if ( tapCount >= 11 ) {
-          tapGridClass = 'theTapsTwelve';
-          document.getElementById( "labelHeader" )[0].className = "labelHeaderTwelve";
-        }
+        var tapLabelClass = 'labelHeader'; // default label header class
         
         var renderedList  = Mustache.render( templateHtml, beerList );
-
+        
         if ( document.getElementById( "taps" ).innerHTML !== renderedList ) {
           document.getElementById( "taps" ).innerHTML = renderedList;
+          if ( tapCount <= 8 ) {
+            tapGridClass = 'theTapsEight';
+          } else if ( tapCount >= 11 ) {
+            tapGridClass = 'theTapsTwelve';
+            tapLabelClass = "labelHeaderTwelve";
+          }
           document.getElementById( "theBeers" ).className = tapGridClass;
+          document.getElementById( "labelHeader" ).className = tapLabelClass;
           resizeContents();
         }
+
       }
 
       // function displayWines( results ) {
