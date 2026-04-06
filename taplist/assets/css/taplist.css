@@ -107,8 +107,25 @@ body {
   display: grid;
   grid-template-columns: 5.5rem minmax(10rem, 15rem) 6rem 7rem 7rem 7rem;
   grid-template-rows: 3rem 1.6rem 2rem;
-  grid-row-gap: 0.15rem;
-  border-bottom: 2px solid #666;
+  /* grid-row-gap: 0.15rem; */
+  border-bottom: none;
+  position: relative;
+  width: 100%;
+}
+
+.beerDetails::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right,
+    rgb(128, 128, 128) 0%,
+    rgb(128, 128, 128) calc(100% - var(--left-percentage) * 1%),
+    hsl(calc(120 * var(--left-percentage) / 100), 100%, 50%) calc(100% - var(--left-percentage) * 1%),
+    hsl(calc(120 * var(--left-percentage) / 100), 100%, 50%) 100%);
+  pointer-events: none;
 }
 
 .badge {
@@ -204,9 +221,9 @@ body {
   text-shadow: 0px 0px 11px #FFAA00, 0px 0px 20px #FFAA00;
 }
 
-.special {
-  border-bottom: 2px solid #f90;
-}
+/* .special {
+  border-bottom: 1px solid #f90;
+} */
 
 .special .half,
 .special .handle,
@@ -225,48 +242,6 @@ body {
 
 .new {
   border-bottom: 2px solid #6F6;
-}
-
-.full {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, rgb(0, 255, 0) 0% 100%);
-  border-image-slice: 1;
-  width:100%;
-}
-
-.seventy {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, grey 30%, rgb(0, 255, 0) 30% 100%);
-  border-image-slice: 1;
-  width:100%;
-}
-
-.fifty {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, grey 50%, rgb(0, 255, 0) 50% 100%);
-  border-image-slice: 1;
-  width:100%;
-}
-
-.thirty {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, grey 70%, rgb(0, 255, 0) 70% 100%);
-  border-image-slice: 1;
-  width:100%;
-}
-
-.fifteen {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, grey 85%, rgb(255, 165, 0) 85% 100%);
-  border-image-slice: 1;
-  width:100%;
-}
-
-.empty {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, grey 85%, rgb(255, 0, 0) 95% 100%);
-  border-image-slice: 1;
-  width:100%;
 }
 
 @media only screen and (min-width: 1200px)  {

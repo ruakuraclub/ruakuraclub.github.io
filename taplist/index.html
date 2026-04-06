@@ -191,22 +191,9 @@
           }
 
           if ( Number.parseFloat(tap['left']) ) {
-            var volumeRemaining = Number.parseFloat(tap['left']);
-            if (volumeRemaining < 5) {
-              tap['gradientClass'] = 'empty';
-            } else if (volumeRemaining <= 15) {
-              tap['gradientClass'] = 'fifteen';
-            } else if ( volumeRemaining > 15 && volumeRemaining <= 30) {
-              tap['gradientClass'] = 'thirty';
-            } else if ( volumeRemaining > 30 && volumeRemaining <= 50) {
-              tap['gradientClass'] = 'fifty';
-            } else if ( volumeRemaining > 50 && volumeRemaining <= 70) {
-              tap['gradientClass'] = 'seventy';
-            } else if ( volumeRemaining > 70 ) {
-              tap['gradientClass'] = 'full';
-            } else {
-              tap['gradientClass'] = '';
-            }
+            tap['gradientPercentage'] = Number.parseFloat(tap['left']);
+          } else {
+            tap['gradientPercentage'] = 0;
           }
 
           var field = 'ABV'
@@ -470,7 +457,7 @@
       </div>
       <div id="theBeers" class="theTaps">
         {{#beers}}
-        <div class="beerDetails {{Class}} {{gradientClass}}">
+        <div class="beerDetails {{Class}}" style="--left-percentage: {{gradientPercentage}}">
           <div class="badge">
             <img src="{{Badge}}">
           </div>
