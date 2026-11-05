@@ -1,0 +1,12 @@
+<?php
+// Copy this file to config.php (same folder) and fill in the database details.
+// config.php is not committed to git.
+
+return [
+    'app_name' => 'Ruakura Club Membership',
+    'db' => [
+        'dsn'      => 'mysql:host=localhost;dbname=rcc_membership;charset=utf8mb4',
+        'user'     => '',
+        'password' => '',
+    ],
+];
