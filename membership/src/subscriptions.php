@@ -103,11 +103,11 @@ function blank_person_row(): array
  * Checks the posted form.
  * Returns [values to redisplay, data for `subscriptions`, people to save (member_id => row), errors].
  */
-function subscription_validate(array $input, array $existingPeople, array $validTypeIds, array $validMemberIds, array $validGroupIds): array
+function subscription_validate(array $input, array $existingPeople, array $validTypeIds, array $validCompanyIds, array $validMemberIds, array $validGroupIds): array
 {
     $text = fn(string $k) => trim((string) ($input[$k] ?? ''));
     $values = [];
-    foreach (['membership_type_id', 'start_date', 'term_years', 'expiry_date', 'amount_paid', 'payment_method',
+    foreach (['membership_type_id', 'company_id', 'start_date', 'term_years', 'expiry_date', 'amount_paid', 'payment_method',
               'paid_date', 'payment_reference', 'student_details', 'notes'] as $k) {
         $values[$k] = $text($k);
     }
@@ -117,6 +117,11 @@ function subscription_validate(array $input, array $existingPeople, array $valid
     $data['membership_type_id'] = (int) $values['membership_type_id'];
     if (!in_array($data['membership_type_id'], $validTypeIds, true)) {
         $errors[] = 'Choose a membership type.';
+    }
+
+    $data['company_id'] = $values['company_id'] === '' ? null : (int) $values['company_id'];
+    if ($data['company_id'] !== null && !in_array($data['company_id'], $validCompanyIds, true)) {
+        $errors[] = 'Choose a company from the list.';
     }
 
     $start = clean_date($values['start_date']);
@@ -358,4 +363,75 @@ function renew_life_members(string $seasonStart): int
 function format_date(?string $date): string
 {
     return $date ? date('j M Y', strtotime($date)) : '';
+}
+
+// Per-person dates recording when they were last sent to an outside system.
+const SENT_DATE_COLUMNS = ['card_printed_date', 'menumate_updated_date', 'brevo_updated_date'];
+
+/**
+ * Active members on a subscription that hasn't expired, one row per person
+ * (their latest-expiring subscription), sorted by surname.
+ * $notSentColumn limits it to people whose date in that column is still empty.
+ */
+function current_subscription_people(string $today, ?string $notSentColumn = null): array
+{
+    $sql = "SELECT sm.subscription_id, sm.member_id, sm.role,
+                   sm.card_printed_date, sm.menumate_updated_date, sm.brevo_updated_date,
+                   s.expiry_date, t.is_life, c.name AS company_name,
+                   m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email
+              FROM subscription_members sm
+              JOIN subscriptions s ON s.id = sm.subscription_id
+              JOIN membership_types t ON t.id = s.membership_type_id
+              LEFT JOIN companies c ON c.id = s.company_id
+              JOIN members m ON m.id = sm.member_id
+             WHERE m.status = 'active'
+               AND s.expiry_date >= ?
+               AND s.expiry_date = (SELECT MAX(s2.expiry_date)
+                                      FROM subscription_members sm2
+                                      JOIN subscriptions s2 ON s2.id = sm2.subscription_id
+                                     WHERE sm2.member_id = m.id)";
+    if ($notSentColumn !== null) {
+        if (!in_array($notSentColumn, SENT_DATE_COLUMNS, true)) {
+            throw new InvalidArgumentException("Unknown column {$notSentColumn}");
+        }
+        $sql .= " AND sm.{$notSentColumn} IS NULL";
+    }
+    $stmt = db()->prepare($sql . ' ORDER BY m.last_name, m.first_name, m.id');
+    $stmt->execute([$today]);
+    return $stmt->fetchAll();
+}
+
+/** Identifies one person on one subscription, for tick boxes. */
+function person_key(array $row): string
+{
+    return $row['subscription_id'] . '-' . $row['member_id'];
+}
+
+/** The rows whose key was ticked and that have a membership number. */
+function ticked_people(array $rows, array $keys): array
+{
+    $keys = array_flip(array_map('strval', $keys));
+    return array_values(array_filter(
+        $rows,
+        fn($row) => isset($keys[person_key($row)]) && $row['membership_number'] !== null
+    ));
+}
+
+/** Records $today in one of SENT_DATE_COLUMNS for the given rows. */
+function mark_people_sent(array $rows, string $column, string $today): int
+{
+    if (!in_array($column, SENT_DATE_COLUMNS, true)) {
+        throw new InvalidArgumentException("Unknown column {$column}");
+    }
+    $stmt = db()->prepare("UPDATE subscription_members SET {$column} = ? WHERE subscription_id = ? AND member_id = ?");
+    foreach ($rows as $row) {
+        $stmt->execute([$today, $row['subscription_id'], $row['member_id']]);
+    }
+    return count($rows);
+}
+
+/** The name the member goes by: preferred name if set, otherwise first name. */
+function known_as(array $row): string
+{
+    return trim((string) $row['preferred_name']) !== '' ? $row['preferred_name'] : $row['first_name'];
 }

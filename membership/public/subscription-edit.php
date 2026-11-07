@@ -34,6 +34,10 @@ $stmt = db()->prepare('SELECT id, name, annual_fee FROM membership_types WHERE i
 $stmt->execute([(int) ($sub['membership_type_id'] ?? 0)]);
 $types = $stmt->fetchAll();
 
+$stmt = db()->prepare('SELECT id, name FROM companies WHERE is_active = 1 OR id = ? ORDER BY name');
+$stmt->execute([(int) ($sub['company_id'] ?? 0)]);
+$companies = $stmt->fetchAll();
+
 $stmt = db()->prepare(
     'SELECT id, name FROM club_groups
       WHERE is_active = 1 OR id IN (SELECT group_id FROM subscription_member_groups WHERE subscription_id = ?)
@@ -57,7 +61,7 @@ if ($sub) {
     ], array_values($existingPeople));
 } else {
     $values = [
-        'membership_type_id' => '', 'term_years' => '1', 'expiry_date' => expiry_for_term(season_start(), 1),
+        'membership_type_id' => '', 'company_id' => '', 'term_years' => '1', 'expiry_date' => expiry_for_term(season_start(), 1),
         'start_date' => season_start(),
         'amount_paid' => '', 'payment_method' => '', 'paid_date' => '', 'payment_reference' => '',
         'student_details' => '', 'notes' => '',
@@ -82,6 +86,7 @@ if (is_post()) {
             $_POST,
             $existingPeople,
             array_map(fn($t) => (int) $t['id'], $types),
+            array_map(fn($c) => (int) $c['id'], $companies),
             array_map(fn($m) => (int) $m['id'], $members),
             array_map(fn($g) => (int) $g['id'], $groups),
         );
@@ -105,6 +110,7 @@ render('subscription-edit', [
     'sub'       => $sub,
     'values'    => $values,
     'types'     => $types,
+    'companies' => $companies,
     'groups'    => $groups,
     'members'   => $members,
     'back'      => $back,

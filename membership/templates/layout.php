@@ -36,11 +36,12 @@ $isActive = fn(array $pages): string => in_array($page, $pages, true) ? ' active
             <a href="export-brevo.php">Update Brevo mailing list</a>
           </div>
         </details>
-        <details class="dropdown<?= $isActive(['users', 'user-edit', 'groups', 'interests', 'membership-types', 'life-renewals', 'login-activity']) ?>">
+        <details class="dropdown<?= $isActive(['users', 'user-edit', 'groups', 'companies', 'interests', 'membership-types', 'life-renewals', 'login-activity']) ?>">
           <summary class="menu-top">Management</summary>
           <div class="dropdown-menu">
             <a href="users.php">Users</a>
             <a href="groups.php">Groups</a>
+            <a href="companies.php">Companies</a>
             <a href="interests.php">Interests</a>
             <a href="membership-types.php">Membership types</a>
             <a href="life-renewals.php">Life member renewals</a>

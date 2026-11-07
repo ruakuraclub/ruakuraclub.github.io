@@ -31,6 +31,14 @@ $action = 'subscription-edit.php?' . ($sub ? 'id=' . (int) $sub['id'] : 'member=
             <?php endforeach; ?>
           </select>
         </label>
+        <label>Company <span class="hint">(if their employer paid)</span>
+          <select name="company_id">
+            <option value="">—</option>
+            <?php foreach ($companies as $c): ?>
+              <option value="<?= (int) $c['id'] ?>"<?= (string) $c['id'] === $values['company_id'] ? ' selected' : '' ?>><?= e($c['name']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </label>
         <?= $field('start_date', 'Start date', 'date', 'required') ?>
         <?= $field('term_years', 'Term (years)', 'number', 'required min="1" max="10"') ?>
         <?= $field('expiry_date', 'Expiry date', 'date') ?>

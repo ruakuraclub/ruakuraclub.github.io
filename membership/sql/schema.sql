@@ -77,12 +77,22 @@ CREATE TABLE members (
     KEY ix_members_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Companies that pay for their staff's memberships (corporate membership).
+CREATE TABLE companies (
+    id         SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name       VARCHAR(100)      NOT NULL,
+    is_active  TINYINT(1)        NOT NULL DEFAULT 1,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_companies_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- One row per payment. A multi-year prepayment is a single row
 -- whose expiry_date is several years after start_date.
 -- The people it covers (primary, partner, juniors) are in subscription_members.
 CREATE TABLE subscriptions (
     id                  INT UNSIGNED      NOT NULL AUTO_INCREMENT,
     membership_type_id  SMALLINT UNSIGNED NOT NULL,
+    company_id          SMALLINT UNSIGNED NULL,     -- set when a company paid (corporate membership)
     start_date          DATE              NOT NULL,
     expiry_date         DATE              NOT NULL,
     amount_paid         DECIMAL(8,2)      NULL,     -- RCC total, after any early-renewal discount
@@ -97,6 +107,8 @@ CREATE TABLE subscriptions (
     KEY ix_subscriptions_expiry (expiry_date),
     CONSTRAINT fk_subscriptions_type
         FOREIGN KEY (membership_type_id) REFERENCES membership_types (id) ON DELETE RESTRICT,
+    CONSTRAINT fk_subscriptions_company
+        FOREIGN KEY (company_id) REFERENCES companies (id) ON DELETE RESTRICT,
     CONSTRAINT ck_subscriptions_dates CHECK (expiry_date > start_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

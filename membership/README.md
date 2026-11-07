@@ -8,6 +8,7 @@ PHP 8.5 + MariaDB 10.11. No build step.
 2. In Plesk, set the site's **document root** to the `public` folder. Everything else (`src/`, `templates/`, `sql/`, `vendor/`, `config.php`) must not be web-accessible.
 3. Run Composer install from Plesk (it finds `composer.json`).
 4. Create a database and user in Plesk, then in phpMyAdmin run `sql/schema.sql` and then `sql/seed.sql`.
+   A database created before companies were added needs `sql/upgrade-2026-11-companies.sql` run once instead.
 5. Copy `config.example.php` to `config.php` and fill in the database details.
 6. Make sure the site is HTTPS-only (Plesk: SSL/TLS → redirect HTTP to HTTPS).
 7. Visit `/setup.php` straight away and create the first login. The page switches itself off once an account exists.

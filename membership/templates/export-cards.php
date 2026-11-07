@@ -33,7 +33,7 @@
           <table>
             <thead><tr><th>Print</th><th>No.</th><th>Name on card</th><th>Status</th><th>Expires</th><th>Printed</th></tr></thead>
             <tbody>
-              <?php foreach ($candidates as $c): $key = card_key($c); $hasNumber = $c['membership_number'] !== null; ?>
+              <?php foreach ($candidates as $c): $key = person_key($c); $hasNumber = $c['membership_number'] !== null; ?>
                 <tr>
                   <td>
                     <?php if ($hasNumber): ?>
