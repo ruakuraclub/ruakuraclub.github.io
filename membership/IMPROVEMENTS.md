@@ -24,8 +24,7 @@ Filter by key status, bands status and bands returned. The status, date and coun
 
 ## Exports
 
-Placeholders exist under the Exports menu. They need the formats or samples before they can be built:
+**Print cards** is done: it downloads `RuakuraClub.xlsx` for the POINTMAN card designer. The remaining placeholders under the Exports menu need the formats or samples before they can be built:
 
-- **Print cards**: what a membership card should show.
 - **Update Menumate**: the patron import CSV format.
 - **Update Brevo mailing list**: the contact attribute names and lists used.

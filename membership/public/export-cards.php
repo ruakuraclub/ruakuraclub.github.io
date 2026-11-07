@@ -1,10 +1,44 @@
 <?php
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/src/bootstrap.php';
+// Membership cards: download RuakuraClub.xlsx for the card designer, then
+// record which cards were printed.
 
-render('coming-soon', [
-    'title'       => 'Print cards',
-    'user'        => require_login(),
-    'description' => 'Membership cards for members whose card hasn\'t been printed for their current subscription.',
+require dirname(__DIR__) . '/src/bootstrap.php';
+require dirname(__DIR__) . '/src/subscriptions.php';
+require dirname(__DIR__) . '/src/cards.php';
+
+$user = require_login();
+$today = date('Y-m-d');
+
+$filter = (string) ($_POST['filter'] ?? $_GET['filter'] ?? 'unprinted');
+if (!isset(CARD_FILTERS[$filter])) {
+    $filter = 'unprinted';
+}
+$candidates = card_candidates($filter, $today);
+$errors = [];
+
+if (is_post()) {
+    csrf_check();
+    $selected = selected_cards($candidates, (array) ($_POST['cards'] ?? []));
+    $action = (string) ($_POST['action'] ?? '');
+    if (!$selected) {
+        $errors[] = 'Tick at least one member.';
+    } elseif ($action === 'download') {
+        send_card_xlsx($selected);
+    } elseif ($action === 'mark') {
+        $count = mark_cards_printed($selected, $today);
+        flash($count === 1 ? 'Marked 1 card as printed.' : "Marked {$count} cards as printed.");
+        redirect('export-cards.php?filter=' . urlencode($filter));
+    }
+}
+
+render('export-cards', [
+    'title'      => 'Print cards',
+    'user'       => $user,
+    'filter'     => $filter,
+    'candidates' => $candidates,
+    'ticked'     => is_post() ? array_flip(array_map('strval', (array) ($_POST['cards'] ?? []))) : null,
+    'errors'     => $errors,
+    'flash'      => take_flash(),
 ]);
