@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 const PAYMENT_METHODS = ['eftpos' => 'EFTPOS', 'internet' => 'Internet banking', 'cash' => 'Cash', 'other' => 'Other'];
 const SUBSCRIPTION_ROLES = ['primary' => 'Primary', 'partner' => 'Partner', 'junior' => 'Junior'];
-const BLANK_PERSON_ROWS = 3;   // empty "add a person" rows shown on the form
 
 function find_subscription(int $id): ?array
 {
@@ -94,9 +93,9 @@ function term_for(string $start, string $expiry): int
     return max(1, min(10, (int) round($days / 365.25)));
 }
 
-function blank_person_row(): array
+function blank_person_row(string $role = ''): array
 {
-    return ['member_id' => '', 'role' => '', 'card_printed_date' => '', 'groups' => []];
+    return ['member_id' => '', 'role' => $role, 'card_printed_date' => '', 'groups' => []];
 }
 
 /**

@@ -3,6 +3,45 @@ $field = function (string $col, string $label, string $type = 'text', string $at
     return '<label>' . e($label) . '<input type="' . $type . '" name="' . $col . '" value="' . e($values[$col] ?? '') . '" ' . $attrs . '></label>';
 };
 $action = 'subscription-edit.php?' . ($sub ? 'id=' . (int) $sub['id'] : 'member=' . (int) $primaryId);
+
+// One person's row. $i is the row number, or '__i__' in the template the "Add junior" button copies.
+$personRow = function (int|string $i, array $p) use ($members, $groups): string {
+    ob_start(); ?>
+    <tr>
+      <td>
+        <select name="people[<?= $i ?>][member_id]" aria-label="Member" data-member-select>
+          <option value="">—</option>
+          <option value="new">+ New member…</option>
+          <?php foreach ($members as $m): ?>
+            <option value="<?= (int) $m['id'] ?>"<?= (string) $m['id'] === $p['member_id'] ? ' selected' : '' ?>>
+              <?= e($m['last_name'] . ', ' . $m['first_name']) ?><?= $m['membership_number'] ? ' (' . (int) $m['membership_number'] . ')' : '' ?><?= $m['status'] === 'active' ? '' : ' – ' . e($m['status']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </td>
+      <td>
+        <select name="people[<?= $i ?>][role]" aria-label="Role">
+          <?php foreach (SUBSCRIPTION_ROLES as $k => $label): ?>
+            <option value="<?= e($k) ?>"<?= $p['role'] === $k ? ' selected' : '' ?>><?= e($label) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </td>
+      <td>
+        <div class="checks">
+          <?php foreach ($groups as $g): ?>
+            <label class="check">
+              <input type="checkbox" name="people[<?= $i ?>][groups][]" value="<?= (int) $g['id'] ?>"<?= in_array((int) $g['id'], $p['groups'], true) ? ' checked' : '' ?>>
+              <?= e($g['name']) ?>
+            </label>
+          <?php endforeach; ?>
+        </div>
+      </td>
+      <td>
+        <input type="date" name="people[<?= $i ?>][card_printed_date]" value="<?= e($p['card_printed_date']) ?>" aria-label="Card printed date">
+      </td>
+    </tr>
+    <?php return ob_get_clean();
+};
 ?>
 <div class="card wide">
   <p class="hint"><a href="<?= e($back) ?>">← Back to member</a></p>
@@ -65,48 +104,19 @@ $action = 'subscription-edit.php?' . ($sub ? 'id=' . (int) $sub['id'] : 'member=
 
     <fieldset>
       <legend>People covered</legend>
-      <p class="hint">One primary member, plus a partner for a double membership and any juniors. Sub &amp; affiliate club memberships end when this subscription expires. Use the empty rows to add people.</p>
+      <p class="hint">One primary member, plus a partner for a double membership and any juniors. Sub &amp; affiliate club memberships end when this subscription expires. Leave the partner blank for a single membership. Choose "+ New member…" to add someone who isn't on the system yet.</p>
       <div class="table-wrap">
         <table class="people">
           <thead><tr><th>Member</th><th>Role</th><th>Sub &amp; affiliate clubs</th><th>Card printed</th></tr></thead>
           <tbody>
             <?php foreach ($values['people'] as $i => $p): ?>
-              <tr>
-                <td>
-                  <select name="people[<?= $i ?>][member_id]" aria-label="Member">
-                    <option value="">—</option>
-                    <?php foreach ($members as $m): ?>
-                      <option value="<?= (int) $m['id'] ?>"<?= (string) $m['id'] === $p['member_id'] ? ' selected' : '' ?>>
-                        <?= e($m['last_name'] . ', ' . $m['first_name']) ?><?= $m['membership_number'] ? ' (' . (int) $m['membership_number'] . ')' : '' ?><?= $m['status'] === 'active' ? '' : ' – ' . e($m['status']) ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                </td>
-                <td>
-                  <select name="people[<?= $i ?>][role]" aria-label="Role">
-                    <?php foreach (SUBSCRIPTION_ROLES as $k => $label): ?>
-                      <option value="<?= e($k) ?>"<?= $p['role'] === $k || ($p['role'] === '' && $k === ($i === 0 ? 'primary' : 'partner')) ? ' selected' : '' ?>><?= e($label) ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </td>
-                <td>
-                  <div class="checks">
-                    <?php foreach ($groups as $g): ?>
-                      <label class="check">
-                        <input type="checkbox" name="people[<?= $i ?>][groups][]" value="<?= (int) $g['id'] ?>"<?= in_array((int) $g['id'], $p['groups'], true) ? ' checked' : '' ?>>
-                        <?= e($g['name']) ?>
-                      </label>
-                    <?php endforeach; ?>
-                  </div>
-                </td>
-                <td>
-                  <input type="date" name="people[<?= $i ?>][card_printed_date]" value="<?= e($p['card_printed_date']) ?>" aria-label="Card printed date">
-                </td>
-              </tr>
+              <?= $personRow($i, $p) ?>
             <?php endforeach; ?>
           </tbody>
         </table>
       </div>
+      <template id="junior-row"><?= $personRow('__i__', blank_person_row('junior')) ?></template>
+      <button type="button" data-add-junior>+ Add junior</button>
     </fieldset>
 
     <fieldset>
@@ -133,3 +143,28 @@ $action = 'subscription-edit.php?' . ($sub ? 'id=' . (int) $sub['id'] : 'member=
     </form>
   </div>
 <?php endif; ?>
+
+<dialog id="new-member-dialog" class="dialog" aria-labelledby="new-member-title">
+  <form method="post" action="member-quick-add.php">
+    <?= csrf_field() ?>
+    <h2 id="new-member-title">New member</h2>
+    <p class="hint">Adds them as an active member and puts them in this row. Fill in the rest of their details on their member page later.</p>
+    <ul class="error" role="alert" hidden></ul>
+    <div class="grid">
+      <label>First name(s)<input type="text" name="first_name" required maxlength="100"></label>
+      <label>Surname<input type="text" name="last_name" required maxlength="100"></label>
+      <label>Preferred name<input type="text" name="preferred_name" maxlength="100"></label>
+      <label>Membership (card) number
+        <input type="text" name="membership_number" inputmode="numeric" pattern="[0-9]*" maxlength="9" data-select-on-focus data-number-check="0">
+        <span class="number-check" aria-live="polite"></span>
+      </label>
+      <label>Email<input type="email" name="email" maxlength="255"></label>
+      <label>Phone<input type="tel" name="phone" maxlength="30"></label>
+      <label>Date of birth <span class="hint">(juniors)</span><input type="date" name="date_of_birth"></label>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="primary">Add member</button>
+      <button type="button" data-close-dialog>Cancel</button>
+    </div>
+  </form>
+</dialog>

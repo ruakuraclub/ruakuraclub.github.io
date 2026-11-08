@@ -117,13 +117,13 @@ $field = function (string $col, string $label, string $type = 'text', string $at
                 <?php endforeach; ?>
               </select>
             </label>
-            <label>Code <span class="hint">(cards and keys, e.g. A1030)</span>
+            <label data-show-for="barrier_card pool_key tennis_key">Code <span class="hint">(e.g. A1030)</span>
               <input type="text" name="identifier" value="<?= e($itemValues['identifier']) ?>" maxlength="50">
             </label>
-            <label>Colour <span class="hint">(wristbands)</span>
+            <label data-show-for="wristband">Colour
               <input type="text" name="colour" value="<?= e($itemValues['colour']) ?>" maxlength="30">
             </label>
-            <label>How many <span class="hint">(wristbands)</span>
+            <label data-show-for="wristband">How many
               <input type="number" name="quantity" value="<?= e($itemValues['quantity']) ?>" min="1" max="20">
             </label>
             <label>Issued
@@ -133,7 +133,7 @@ $field = function (string $col, string $label, string $type = 'text', string $at
               <input type="text" name="notes" value="<?= e($itemValues['notes']) ?>" maxlength="255">
             </label>
             <?php if ($keysHeld): ?>
-              <label>Old key returned? <span class="hint">(required when issuing a new <?= e(implode(' or ', array_map(fn($t) => mb_strtolower(ACCESS_ITEM_TYPES[$t]), array_keys($keysHeld)))) ?>)</span>
+              <label data-show-for="pool_key tennis_key">Old key returned? <span class="hint">(required when issuing a new <?= e(implode(' or ', array_map(fn($t) => mb_strtolower(ACCESS_ITEM_TYPES[$t]), array_keys($keysHeld)))) ?>)</span>
                 <select name="old_key_returned">
                   <option value="">—</option>
                   <option value="yes"<?= $itemValues['old_key_returned'] === 'yes' ? ' selected' : '' ?>>Yes, returned</option>
@@ -142,7 +142,7 @@ $field = function (string $col, string $label, string $type = 'text', string $at
               </label>
             <?php endif; ?>
             <?php if ($bandsHeld > 0): ?>
-              <label>Old wristbands returned <span class="hint">(required for wristbands: they hold <?= (int) $bandsHeld ?>)</span>
+              <label data-show-for="wristband">Old wristbands returned <span class="hint">(required for wristbands: they hold <?= (int) $bandsHeld ?>)</span>
                 <input type="number" name="returned" value="<?= e($itemValues['returned']) ?>" min="0" max="<?= (int) $bandsHeld ?>">
               </label>
             <?php endif; ?>

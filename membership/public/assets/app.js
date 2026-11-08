@@ -233,14 +233,15 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// Member form: say straight away whether the membership number is free or already taken.
-// (Saving checks again, so this is just early warning.)
+// Membership number fields (member form, New member dialog): say straight away whether the
+// number is free or already taken. data-number-check is the member's own id (0 for a new one).
+// Saving checks again, so this is just early warning.
 document.addEventListener('DOMContentLoaded', function () {
-  var input = document.querySelector('input[data-number-check]');
-  if (!input) {
-    return;
-  }
-  var status = document.getElementById('number-check');
+  document.querySelectorAll('input[data-number-check]').forEach(watchNumber);
+});
+
+function watchNumber(input) {
+  var status = input.parentElement.querySelector('.number-check');
   var original = input.value.trim();   // an existing member's own number needs no message
   var timer = null;
   var pending = null;
@@ -293,4 +294,118 @@ document.addEventListener('DOMContentLoaded', function () {
     timer = setTimeout(check, 300);   // wait for a pause in typing
   });
   check();   // a new member's suggested number gets a tick straight away
+}
+
+// Subscription form: "+ Add junior" adds another row (copied from the junior-row template).
+var nextJuniorRow = 1000;   // row numbers above any the page starts with
+document.addEventListener('click', function (event) {
+  if (!event.target.closest('[data-add-junior]')) {
+    return;
+  }
+  var template = document.getElementById('junior-row');
+  var tbody = template.closest('fieldset').querySelector('table.people tbody');
+  tbody.insertAdjacentHTML('beforeend', template.innerHTML.replace(/__i__/g, nextJuniorRow++));
+  tbody.lastElementChild.querySelector('select').focus();
+});
+
+// Subscription form: "+ New member…" in a member dropdown opens a dialog to add them,
+// then puts the new member in that row (and in every other dropdown's list).
+document.addEventListener('DOMContentLoaded', function () {
+  var dialog = document.getElementById('new-member-dialog');
+  if (!dialog) {
+    return;
+  }
+  var form = dialog.querySelector('form');
+  var errors = dialog.querySelector('.error');
+  var number = form.querySelector('input[name="membership_number"]');
+  var target = null;
+
+  // Remember each dropdown's choice so picking "+ New member…" can put it back.
+  document.addEventListener('focusin', function (event) {
+    if (event.target.matches('select[data-member-select]')) {
+      event.target.dataset.previous = event.target.value;
+    }
+  });
+
+  document.addEventListener('change', function (event) {
+    var select = event.target;
+    if (!select.matches('select[data-member-select]') || select.value !== 'new') {
+      return;
+    }
+    select.value = select.dataset.previous || '';
+    target = select;
+    form.reset();
+    errors.hidden = true;
+    errors.textContent = '';
+    dialog.showModal();
+    fetch('member-quick-add.php', { credentials: 'same-origin' })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        number.value = data.next;
+        number.dispatchEvent(new Event('input', { bubbles: true }));
+      })
+      .catch(function () {});
+  });
+
+  dialog.addEventListener('click', function (event) {
+    if (event.target.closest('[data-close-dialog]')) {
+      dialog.close();
+    }
+  });
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    fetch(form.action, { method: 'POST', body: new FormData(form), credentials: 'same-origin' })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        if (data.errors) {
+          errors.textContent = '';
+          data.errors.forEach(function (message) {
+            var li = document.createElement('li');
+            li.textContent = message;
+            errors.append(li);
+          });
+          errors.hidden = false;
+          return;
+        }
+        addOption(document, data);
+        addOption(document.getElementById('junior-row').content, data);
+        if (target) {
+          target.value = String(data.id);
+        }
+        dialog.close();
+      })
+      .catch(function () {
+        errors.textContent = "Couldn't add the member. Check you're still logged in and try again.";
+        errors.hidden = false;
+      });
+  });
+
+  // Adds the new member to every member dropdown, in surname order.
+  function addOption(root, member) {
+    root.querySelectorAll('select[data-member-select]').forEach(function (select) {
+      var option = new Option(member.label, member.id);
+      var before = Array.from(select.options).slice(2).find(function (o) {
+        return o.text.trim().localeCompare(member.label, undefined, { sensitivity: 'base' }) > 0;
+      });
+      select.add(option, before || null);
+    });
+  }
+});
+
+// Issue an item: only show the fields that apply to the chosen item (code for cards and keys,
+// colour and count for wristbands). Fields stay visible if scripts don't run.
+document.addEventListener('DOMContentLoaded', function () {
+  var type = document.querySelector('select[name="item_type"]');
+  if (!type) {
+    return;
+  }
+  var form = type.closest('form');
+  function update() {
+    form.querySelectorAll('[data-show-for]').forEach(function (field) {
+      field.hidden = field.getAttribute('data-show-for').split(' ').indexOf(type.value) === -1;
+    });
+  }
+  type.addEventListener('change', update);
+  update();
 });

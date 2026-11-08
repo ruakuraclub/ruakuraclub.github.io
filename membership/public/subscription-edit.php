@@ -100,9 +100,15 @@ if (is_post()) {
 }
 
 $values['people'] = array_values(array_filter($values['people'], fn($p) => $p['member_id'] !== ''));
-for ($i = 0; $i < BLANK_PERSON_ROWS; $i++) {
-    $values['people'][] = blank_person_row();
+// Always a primary and a partner row; juniors are added with the "Add junior" button.
+if (!array_filter($values['people'], fn($p) => $p['role'] === 'primary')) {
+    array_unshift($values['people'], blank_person_row('primary'));
 }
+if (!array_filter($values['people'], fn($p) => $p['role'] === 'partner')) {
+    $values['people'][] = blank_person_row('partner');
+}
+$roleOrder = array_flip(array_keys(SUBSCRIPTION_ROLES));
+usort($values['people'], fn($a, $b) => ($roleOrder[$a['role']] ?? 9) <=> ($roleOrder[$b['role']] ?? 9));
 
 render('subscription-edit', [
     'title'     => $sub ? 'Edit subscription' : 'Add subscription',
