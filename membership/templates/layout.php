@@ -2,6 +2,8 @@
 /** @var string $title @var string $content */
 $page = basename($_SERVER['SCRIPT_NAME'], '.php');
 $isActive = fn(array $pages): string => in_array($page, $pages, true) ? ' active' : '';
+// Version stamp so browsers fetch the file again after it changes.
+$asset = fn(string $file): string => 'assets/' . $file . '?v=' . filemtime(dirname(__DIR__) . '/public/assets/' . $file);
 ?>
 <!doctype html>
 <html lang="en-NZ">
@@ -10,8 +12,8 @@ $isActive = fn(array $pages): string => in_array($page, $pages, true) ? ' active
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title><?= e($title) ?> · <?= e(config()['app_name']) ?></title>
-  <link rel="stylesheet" href="assets/style.css">
-  <script src="assets/app.js" defer></script>
+  <link rel="stylesheet" href="<?= e($asset('style.css')) ?>">
+  <script src="<?= e($asset('app.js')) ?>" defer></script>
 </head>
 <body>
   <header class="site-header">

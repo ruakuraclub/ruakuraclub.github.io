@@ -60,9 +60,23 @@ $names = fn(array $contacts): string => implode(', ', array_map(fn($c) => implod
       <?php endif; ?>
     <?php endforeach; ?>
 
-    <?php if ($plan['skipped']['no_email'] || $plan['skipped']['bad_email']): ?>
-      <p class="hint">Not sent: <?= (int) $plan['skipped']['no_email'] ?> member<?= $plan['skipped']['no_email'] === 1 ? '' : 's' ?> without an email address<?php if ($plan['skipped']['bad_email']): ?>,
-        <?= (int) $plan['skipped']['bad_email'] ?> with an email address that doesn't look right<?php endif; ?>.</p>
+    <?php if ($plan['skipped']): ?>
+      <h2>Not sent (<?= count($plan['skipped']) ?>)</h2>
+      <p class="hint">These members should be on a list but can't be sent without a working email address. Fix them on their member page, then come back.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Problem</th></tr></thead>
+          <tbody>
+            <?php foreach ($plan['skipped'] as $s): ?>
+              <tr>
+                <td><a href="member-edit.php?id=<?= (int) $s['id'] ?>"><?= e($s['name']) ?></a></td>
+                <td><?= $s['email'] !== '' ? e($s['email']) : '—' ?></td>
+                <td><?= e($s['reason']) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
     <?php endif; ?>
 
     <form method="post" action="export-brevo.php" class="form-actions">

@@ -128,7 +128,8 @@ function brevo_managed_lists(array $mapping): array
 
 /**
  * Where each member's email should be. Members sharing an email are combined.
- * Returns ['contacts' => [email => [email, first_name, last_name, lists, names]], 'skipped' => [reason => count]].
+ * Returns ['contacts' => [email => [email, first_name, last_name, lists, names]],
+ *          'skipped' => [[id, name, email, reason]]] — skipped: members who belong on a list but have no usable email.
  * A contact with no lists is one to take off every managed list.
  */
 function brevo_desired(array $mapping, string $today): array
@@ -152,18 +153,8 @@ function brevo_desired(array $mapping, string $today): array
     $stmt->execute([$today]);
 
     $contacts = [];
-    $skipped = ['no_email' => 0, 'bad_email' => 0];
+    $skipped = [];
     foreach ($stmt->fetchAll() as $m) {
-        $email = mb_strtolower(trim((string) $m['email']));
-        if ($email === '') {
-            $skipped['no_email']++;
-            continue;
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $skipped['bad_email']++;
-            continue;
-        }
-
         $current = $m['status'] === 'active' && $m['is_current'];
         $lapsed = !$current && ($m['status'] === 'lapsed' || ($m['status'] === 'active' && $m['has_subscription']));
         $lists = [];
@@ -176,6 +167,15 @@ function brevo_desired(array $mapping, string $today): array
         }
 
         $name = trim(known_as($m) . ' ' . $m['last_name']);
+        $email = mb_strtolower(trim((string) $m['email']));
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Only worth reporting when they would otherwise have gone on a list.
+            if ($lists) {
+                $skipped[] = ['id' => (int) $m['id'], 'name' => $name, 'email' => (string) $m['email'],
+                              'reason' => $email === '' ? 'No email address' : "Email address doesn't look right"];
+            }
+            continue;
+        }
         if (!isset($contacts[$email])) {
             $contacts[$email] = ['email' => $email, 'first_name' => known_as($m), 'last_name' => $m['last_name'], 'lists' => [], 'names' => []];
         } elseif ($lists && !$contacts[$email]['lists']) {
