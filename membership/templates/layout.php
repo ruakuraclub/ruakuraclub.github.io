@@ -30,12 +30,13 @@ $asset = fn(string $file): string => 'assets/' . $file . '?v=' . filemtime(dirna
             <a href="report-tennis.php">Tennis access</a>
           </div>
         </details>
-        <details class="dropdown<?= $isActive(['export-cards', 'export-menumate', 'export-brevo']) ?>">
+        <details class="dropdown<?= $isActive(['export-cards', 'export-menumate', 'export-brevo', 'export-myob']) ?>">
           <summary class="menu-top">Exports</summary>
           <div class="dropdown-menu">
             <a href="export-cards.php">Print cards</a>
             <a href="export-menumate.php">Update Menumate</a>
             <a href="export-brevo.php">Update Brevo mailing list</a>
+            <a href="export-myob.php">MYOB contacts</a>
           </div>
         </details>
         <details class="dropdown<?= $isActive(['email', 'email-log']) ?>">

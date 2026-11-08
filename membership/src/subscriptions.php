@@ -377,8 +377,8 @@ function current_subscription_people(string $today, ?string $notSentColumn = nul
 {
     $sql = "SELECT sm.subscription_id, sm.member_id, sm.role,
                    sm.card_printed_date, sm.menumate_updated_date,
-                   s.expiry_date, t.is_life, c.name AS company_name,
-                   m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email, m.phone, m.date_of_birth
+                   s.expiry_date, s.paid_date, s.company_id, t.is_life, c.name AS company_name,
+                   m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email, m.phone, m.phone_work, m.address, m.date_of_birth
               FROM subscription_members sm
               JOIN subscriptions s ON s.id = sm.subscription_id
               JOIN membership_types t ON t.id = s.membership_type_id
