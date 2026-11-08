@@ -9,4 +9,9 @@ return [
         'user'     => '',
         'password' => '',
     ],
+    // Brevo: create a key under Brevo → SMTP & API → API keys. Leave blank to turn the Brevo pages off.
+    'brevo' => [
+        'api_key' => '',
+        'api_url' => 'https://api.brevo.com/v3',
+    ],
 ];

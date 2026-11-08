@@ -366,7 +366,7 @@ function format_date(?string $date): string
 }
 
 // Per-person dates recording when they were last sent to an outside system.
-const SENT_DATE_COLUMNS = ['card_printed_date', 'menumate_updated_date', 'brevo_updated_date'];
+const SENT_DATE_COLUMNS = ['card_printed_date', 'menumate_updated_date'];
 
 /**
  * Active members on a subscription that hasn't expired, one row per person
@@ -376,7 +376,7 @@ const SENT_DATE_COLUMNS = ['card_printed_date', 'menumate_updated_date', 'brevo_
 function current_subscription_people(string $today, ?string $notSentColumn = null): array
 {
     $sql = "SELECT sm.subscription_id, sm.member_id, sm.role,
-                   sm.card_printed_date, sm.menumate_updated_date, sm.brevo_updated_date,
+                   sm.card_printed_date, sm.menumate_updated_date,
                    s.expiry_date, t.is_life, c.name AS company_name,
                    m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email
               FROM subscription_members sm

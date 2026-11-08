@@ -24,6 +24,7 @@ Filter by key status, bands status and bands returned. The status, date and coun
 
 ## Exports
 
-**Print cards** (`RuakuraClub.xlsx` for the POINTMAN card designer) and **Update Menumate** (`Members.csv` patron import) are done. The remaining placeholder needs its format before it can be built:
+All three are built: **Print cards** (`RuakuraClub.xlsx` for the POINTMAN card designer), **Update Menumate** (`Members.csv` patron import) and **Update Brevo mailing list** (syncs lists through the Brevo API).
 
-- **Update Brevo mailing list**: the contact attribute names and lists used.
+- Brevo was tested against a stand-in, not the real API. Do the first real run against test lists.
+- Brevo contacts only get FIRSTNAME and LASTNAME. Membership number or expiry could be sent too, once matching contact attributes exist in Brevo.

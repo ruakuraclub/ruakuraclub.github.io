@@ -25,3 +25,11 @@ PHP 8.5 + MariaDB 10.11. No build step.
 - If the only user is locked out of their authenticator, the hosting admin can run this in phpMyAdmin, then the user scans a new QR code at next login:
   `UPDATE users SET totp_secret = NULL, totp_last_timeslice = NULL WHERE username = '…';`
   This is why it's worth having at least two users.
+
+## Brevo
+
+1. In Brevo, create an API key (SMTP & API → API keys) and put it in `config.php` under `brevo` → `api_key`.
+2. Create the lists you want in Brevo, then choose them under **Management → Brevo lists**: a main list for current members, a lapsed list, and optionally a list per interest.
+3. **Exports → Update Brevo mailing list** shows who will be added and removed. **Send to Brevo** applies it. Run it after renewals or member changes.
+
+Only members who agreed to the newsletter are put on lists. Withdrawing consent, resigning or dying takes them off. Lapsed members move to the lapsed list. People on those lists who aren't members, and lists not chosen there, are never touched. For the first real run, try it against test lists.

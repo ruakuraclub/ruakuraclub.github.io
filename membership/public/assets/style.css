@@ -162,7 +162,7 @@ a.button, .filters button {
 .filters label:nth-child(2) { flex: 0 1 160px; }
 .filters button { padding: 10px 16px; }
 
-td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 td.wrap { white-space: normal; }
 td.actions { display: flex; gap: 16px; }
 td.expired { color: var(--err); }

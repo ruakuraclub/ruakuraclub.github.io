@@ -120,7 +120,6 @@ CREATE TABLE subscription_members (
     role                   ENUM('primary','partner','junior') NOT NULL DEFAULT 'primary',
     card_printed_date      DATE         NULL,
     menumate_updated_date  DATE         NULL,
-    brevo_updated_date     DATE         NULL,
     PRIMARY KEY (subscription_id, member_id),
     KEY ix_subscription_members_member (member_id),
     CONSTRAINT fk_subscription_members_subscription
@@ -163,6 +162,7 @@ CREATE TABLE interests (
     name        VARCHAR(100)      NOT NULL,
     sort_order  SMALLINT          NOT NULL DEFAULT 0,
     is_active   TINYINT(1)        NOT NULL DEFAULT 1,
+    brevo_list_id INT UNSIGNED    NULL,   -- Brevo list that members with this interest are added to
     PRIMARY KEY (id),
     UNIQUE KEY uq_interests_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -198,4 +198,11 @@ CREATE TABLE access_items (
     KEY ix_access_items_member (member_id),
     CONSTRAINT fk_access_items_member
         FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Single values the app keeps, e.g. brevo_main_list_id, brevo_lapsed_list_id, brevo_last_sync.
+CREATE TABLE settings (
+    name   VARCHAR(50)   NOT NULL,
+    value  VARCHAR(255)  NULL,
+    PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

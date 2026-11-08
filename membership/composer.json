@@ -4,6 +4,7 @@
     "type": "project",
     "require": {
         "php": "^8.5",
+        "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "bacon/bacon-qr-code": "^3.1",
