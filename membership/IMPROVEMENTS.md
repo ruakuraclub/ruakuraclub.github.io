@@ -27,6 +27,7 @@ Filter by key status, bands status and bands returned. The status, date and coun
 All four are built: **Print cards** (`RuakuraClub.xlsx` for the POINTMAN card designer), **Update Menumate** (`Members.csv` patron import), **Update Brevo mailing list** (syncs lists through the Brevo API) and **MYOB contacts** (`MYOB-Contacts.txt`).
 
 - MYOB contacts was built from MYOB's published import layout, not a sample file: tab-separated, `{}` in A1, headings on row 2. MYOB Business (Essentials) and AccountRight use the same layout. Check the first import maps the columns as expected, and whether MYOB wants UTF-8 or ANSI for names with macrons.
+- **Waiting on a sample:** an export of a few contacts has been requested from the treasurer. When it arrives, put it in `samples/myob/` and compare it column by column. Check which product it came from: the original MYOB Essentials (not yet moved to MYOB Business) may need a different file, and if AccountRight differs (field lengths, the `{}` line), add a second download button for it.
 
 - Brevo was tested against a stand-in, not the real API. Do the first real run against test lists.
 - Brevo contacts only get FIRSTNAME and LASTNAME. Membership number or expiry could be sent too, once matching contact attributes exist in Brevo.
