@@ -88,6 +88,7 @@ summary.menu-top::after { content: " ▾"; color: var(--muted); }
 .dropdown-menu a:hover, .dropdown-menu button:hover { background: var(--bg); }
 .dropdown-menu form { margin: 0; border-top: 1px solid var(--line); }
 .menu-note { display: block; padding: 4px 16px 8px; font-size: 0.85rem; color: var(--muted); }
+.menu-hint { display: block; font-size: 0.8rem; color: var(--muted); }
 
 main { padding: 24px 16px; }
 .card {
