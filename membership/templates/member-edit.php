@@ -26,7 +26,7 @@ $field = function (string $col, string $label, string $type = 'text', string $at
       <?php else: ?>
         <div class="table-wrap">
           <table class="subs">
-            <thead><tr><th>Period</th><th></th><th>Type</th><th>Role</th><th>With</th><th>Groups</th><th>Paid</th><th></th></tr></thead>
+            <thead><tr><th>Period</th><th></th><th>Type</th><th>Role</th><th>With</th><th>Clubs</th><th>Paid</th><th></th></tr></thead>
             <tbody>
               <?php foreach ($subscriptions as $s):
                   $state = $s['expiry_date'] < $today ? 'expired' : ($s['start_date'] > $today ? 'future' : 'current'); ?>

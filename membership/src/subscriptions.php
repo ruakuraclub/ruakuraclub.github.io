@@ -213,7 +213,7 @@ function subscription_validate(array $input, array $existingPeople, array $valid
     if ($expiry && $expiry < date('Y-m-d')) {
         foreach ($people as $memberId => $p) {
             if (array_diff($p['groups'], $existingPeople[$memberId]['groups'] ?? [])) {
-                $errors[] = "Groups can't be added to a subscription that has already expired.";
+                $errors[] = "Sub & affiliate clubs can't be added to a subscription that has already expired.";
                 break;
             }
         }

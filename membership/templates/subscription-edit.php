@@ -65,10 +65,10 @@ $action = 'subscription-edit.php?' . ($sub ? 'id=' . (int) $sub['id'] : 'member=
 
     <fieldset>
       <legend>People covered</legend>
-      <p class="hint">One primary member, plus a partner for a double membership and any juniors. Groups end when this subscription expires. Use the empty rows to add people.</p>
+      <p class="hint">One primary member, plus a partner for a double membership and any juniors. Sub &amp; affiliate club memberships end when this subscription expires. Use the empty rows to add people.</p>
       <div class="table-wrap">
         <table class="people">
-          <thead><tr><th>Member</th><th>Role</th><th>Groups</th><th>Card printed</th></tr></thead>
+          <thead><tr><th>Member</th><th>Role</th><th>Sub &amp; affiliate clubs</th><th>Card printed</th></tr></thead>
           <tbody>
             <?php foreach ($values['people'] as $i => $p): ?>
               <tr>
@@ -124,7 +124,7 @@ $action = 'subscription-edit.php?' . ($sub ? 'id=' . (int) $sub['id'] : 'member=
 <?php if ($sub): ?>
   <div class="card narrow">
     <h2>Delete this subscription</h2>
-    <p>Only for mistakes. It removes the subscription and its group memberships for everyone on it. It can't be undone.</p>
+    <p>Only for mistakes. It removes the subscription and its sub &amp; affiliate club memberships for everyone on it. It can't be undone.</p>
     <form method="post" action="<?= e($action) ?>">
       <?= csrf_field() ?>
       <input type="hidden" name="action" value="delete">
