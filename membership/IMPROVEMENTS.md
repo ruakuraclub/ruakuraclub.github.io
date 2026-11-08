@@ -52,4 +52,10 @@ Worked out by decoding a copy of Menumate's database against past imports (`Impo
 
 Likely but unused: 5 `PHONE_EXTENSION`, 6 `EMAIL`, 8 `INITIALS`, 9 `PIN`, 16 `MIDDLE_NAME`, 18 `SEX`, 19 `TAB_ENALBED`, 20 `PAYROLL_ID`, 22 `KNOWN_AS`.
 
+### For investigation: subscription expiry
+
+Menumate stores an expiry in `MEMBERSHIP_SUBS_DETAILS.SUBS_EXPIRY_DATE` (one row per member, linked by `CONTACTS_KEY`), but it's empty for every member and the CSV importer's insert doesn't include it, so `Members.csv` can't set it as it stands. Plan: set an expiry on one member by hand in Menumate, take a copy of `MENUMATE.FDB`, and see what changed: whether expiry is used at the till, and whether another column or route could set it.
+
+The same check could show what the other subscription fields do: every imported member has `SUBS_TYPE` `AUTO`, `SUBS_PAID` `T`, paid amount 0, receipt `-` and `POINTS_RULES_SUBS` 192 (binary `11000000`). That may come from the `Y,Y,N,N,N` in columns 36–40 (two Y's, two bits set) — unproven.
+
 To confirm the "from field order" columns, import one test member with a marker in each empty column (`C03`, `C04`, …) into a test copy of Menumate and check where each landed. Check the date of birth shows correctly after the first real import.
