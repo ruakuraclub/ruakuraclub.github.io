@@ -49,7 +49,7 @@ $asset = fn(string $file): string => 'assets/' . $file . '?v=' . filemtime(dirna
           <summary class="menu-top">Management</summary>
           <div class="dropdown-menu">
             <a href="users.php">Users</a>
-            <a href="groups.php">Sub &amp; Affiliate Clubs<span class="menu-hint">e.g. Squash, Pool</span></a>
+            <a href="groups.php">Sub &amp; Affiliate Clubs<span class="menu-hint">Squash, Darts, Swimming</span></a>
             <a href="companies.php">Companies<span class="menu-hint">Employers paying for staff</span></a>
             <a href="interests.php">Interests</a>
             <a href="brevo-lists.php">Brevo lists</a>
