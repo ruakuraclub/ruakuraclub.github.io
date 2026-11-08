@@ -186,7 +186,11 @@ $field = function (string $col, string $label, string $type = 'text', string $at
     <fieldset>
       <legend>Membership</legend>
       <div class="grid">
-        <?= $field('membership_number', $member ? 'Membership (card) number' : 'Membership (card) number (next free)', 'text', 'inputmode="numeric" pattern="[0-9]*" maxlength="9" data-select-on-focus') ?>
+        <label>Membership (card) number
+          <input type="text" name="membership_number" value="<?= e($values['membership_number']) ?>" inputmode="numeric" pattern="[0-9]*" maxlength="9"
+                 data-select-on-focus data-number-check="<?= (int) ($member['id'] ?? 0) ?>" aria-describedby="number-check">
+          <span id="number-check" class="number-check" aria-live="polite"></span>
+        </label>
         <label>Status
           <select name="status">
             <?php foreach ($statuses as $s): ?>

@@ -80,6 +80,14 @@ function next_membership_number(): int
     return (int) db()->query('SELECT COALESCE(MAX(membership_number), 0) + 1 FROM members')->fetchColumn();
 }
 
+/** The member (other than $exceptId) who already has this membership number, if any. */
+function member_with_number(int $number, int $exceptId): ?array
+{
+    $stmt = db()->prepare('SELECT id, first_name, last_name FROM members WHERE membership_number = ? AND id <> ?');
+    $stmt->execute([$number, $exceptId]);
+    return $stmt->fetch() ?: null;
+}
+
 /** Active members with a number, for suggesting nominators. Leaves out $exceptId. */
 function nominator_choices(int $exceptId): array
 {
@@ -145,9 +153,7 @@ function member_validate(array $input, int $id): array
             $errors[] = 'Membership number must be a whole number.';
         } else {
             $data['membership_number'] = (int) $values['membership_number'];
-            $stmt = db()->prepare('SELECT first_name, last_name FROM members WHERE membership_number = ? AND id <> ?');
-            $stmt->execute([$data['membership_number'], $id]);
-            if ($other = $stmt->fetch()) {
+            if ($other = member_with_number($data['membership_number'], $id)) {
                 $errors[] = "Membership number {$data['membership_number']} already belongs to {$other['first_name']} {$other['last_name']}.";
             }
         }

@@ -232,3 +232,65 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+// Member form: say straight away whether the membership number is free or already taken.
+// (Saving checks again, so this is just early warning.)
+document.addEventListener('DOMContentLoaded', function () {
+  var input = document.querySelector('input[data-number-check]');
+  if (!input) {
+    return;
+  }
+  var status = document.getElementById('number-check');
+  var original = input.value.trim();   // an existing member's own number needs no message
+  var timer = null;
+  var pending = null;
+
+  function show(text, state, link) {
+    status.textContent = text;
+    status.className = 'number-check' + (state ? ' ' + state : '');
+    if (link) {
+      var a = document.createElement('a');
+      a.href = link;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = 'view';
+      status.append(' (', a, ')');
+    }
+  }
+
+  function check() {
+    var number = input.value.trim();
+    if (pending) {
+      pending.abort();
+      pending = null;
+    }
+    if (number === '' || (number === original && input.dataset.numberCheck !== '0')) {
+      show('', '');
+      return;
+    }
+    if (!/^\d{1,9}$/.test(number)) {
+      show('✗ Numbers only', 'taken');
+      return;
+    }
+    pending = new AbortController();
+    var query = new URLSearchParams({ number: number, except: input.dataset.numberCheck }).toString();
+    fetch('member-number-check.php?' + query, { credentials: 'same-origin', signal: pending.signal })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        if (data.status === 'taken') {
+          show('✗ Already belongs to ' + data.name, 'taken', 'member-edit.php?id=' + data.id);
+        } else if (data.status === 'available') {
+          show('✓ Available', 'ok');
+        } else {
+          show('✗ Numbers only', 'taken');
+        }
+      })
+      .catch(function () {});
+  }
+
+  input.addEventListener('input', function () {
+    clearTimeout(timer);
+    timer = setTimeout(check, 300);   // wait for a pause in typing
+  });
+  check();   // a new member's suggested number gets a tick straight away
+});
