@@ -47,7 +47,7 @@ function brevo_request(string $method, string $path, ?array $body = null): array
         throw new BrevoError(match ($status) {
             401     => 'Brevo rejected the API key. Check the key in config.php.',
             429     => 'Brevo says there have been too many requests. Wait a minute and try again.',
-            default => "Brevo returned an error ({$status}): " . ($data['message'] ?? 'no details'),
+            default => "Brevo returned an error ({$status}): " . rtrim((string) ($data['message'] ?? 'no details'), '.') . '.',
         });
     }
     return $data;

@@ -13,5 +13,6 @@ return [
     'brevo' => [
         'api_key' => '',
         'api_url' => 'https://api.brevo.com/v3',
+        'daily_limit' => 300,   // emails a day your Brevo plan allows (free plan: 300)
     ],
 ];

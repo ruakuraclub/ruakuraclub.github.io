@@ -33,3 +33,14 @@ PHP 8.5 + MariaDB 10.11. No build step.
 3. **Exports → Update Brevo mailing list** shows who will be added and removed. **Send to Brevo** applies it. Run it after renewals or member changes.
 
 Only members who agreed to the newsletter are put on lists. Withdrawing consent, resigning or dying takes them off. Lapsed members move to the lapsed list. People on those lists who aren't members, and lists not chosen there, are never touched. For the first real run, try it against test lists.
+
+## Emailing members
+
+**Email → Email members** sends one of your Brevo templates (edit them in Brevo; there's a link on the page) to the members you tick: current, lapsed or both, optionally only those expiring by a date.
+
+- **One email each** (default): each address gets its own personalised email. Templates can use `{{ params.FIRSTNAME }}`, `{{ params.LASTNAME }}`, `{{ params.FULLNAME }}`, `{{ params.MEMBERSHIP_NUMBER }}` and `{{ params.EXPIRY }}`.
+- **BCC**: one email addressed to the template's sender, with members in BCC (98 per email). Placeholders are blank.
+- Members sharing an email address get one email. CC is never used.
+- Send a test to yourself first. Every send is logged under **Email → Sent emails** and on each member's page.
+- These are transactional emails, so they reach members who unsubscribed from the newsletter. Use them only for membership business (renewals, notices), not promotion.
+- The page stops a send that would go over the daily limit in `config.php` (`daily_limit`, 300 on Brevo's free plan). Raise it if you upgrade.

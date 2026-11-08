@@ -154,6 +154,29 @@ $field = function (string $col, string $label, string $type = 'text', string $at
       </details>
     </section>
 
+    <section id="emails" class="subs-section">
+      <h2>Emails sent</h2>
+      <?php if (!$emails): ?>
+        <p class="hint">None sent from Email members yet.</p>
+      <?php else: ?>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Sent</th><th>Template</th><th>Subject</th><th>To</th></tr></thead>
+            <tbody>
+              <?php foreach ($emails as $em): ?>
+                <tr>
+                  <td><a href="email-log.php?id=<?= (int) $em['id'] ?>"><?= e(date('j M Y, g:ia', strtotime($em['sent_at']))) ?></a></td>
+                  <td><?= e($em['template_name']) ?></td>
+                  <td><?= e((string) $em['subject']) ?></td>
+                  <td><?= e($em['email']) ?><?= $em['mode'] === 'bcc' ? ' (BCC)' : '' ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php endif; ?>
+    </section>
+
     <h2>Details</h2>
   <?php endif; ?>
 

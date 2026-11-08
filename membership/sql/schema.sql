@@ -206,3 +206,34 @@ CREATE TABLE settings (
     value  VARCHAR(255)  NULL,
     PRIMARY KEY (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Emails sent through Brevo from the Email members page: one row per send...
+CREATE TABLE email_sends (
+    id               INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    sent_at          DATETIME      NOT NULL,
+    user_id          SMALLINT UNSIGNED NULL,            -- who sent it
+    template_id      INT UNSIGNED  NOT NULL,            -- Brevo template
+    template_name    VARCHAR(255)  NOT NULL,
+    subject          VARCHAR(255)  NULL,
+    mode             ENUM('individual','bcc','test') NOT NULL,
+    recipient_count  SMALLINT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    KEY ix_email_sends_sent_at (sent_at),
+    CONSTRAINT fk_email_sends_user
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ...and one row per member it went to (members sharing an email get one email, a row each).
+CREATE TABLE email_send_recipients (
+    id          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    send_id     INT UNSIGNED  NOT NULL,
+    member_id   INT UNSIGNED  NULL,                     -- NULL for a test send
+    email       VARCHAR(255)  NOT NULL,
+    message_id  VARCHAR(255)  NULL,                     -- Brevo's message ID, for tracing delivery in Brevo
+    PRIMARY KEY (id),
+    KEY ix_email_send_recipients_member (member_id),
+    CONSTRAINT fk_email_send_recipients_send
+        FOREIGN KEY (send_id) REFERENCES email_sends (id) ON DELETE CASCADE,
+    CONSTRAINT fk_email_send_recipients_member
+        FOREIGN KEY (member_id) REFERENCES members (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

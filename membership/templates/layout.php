@@ -38,6 +38,13 @@ $asset = fn(string $file): string => 'assets/' . $file . '?v=' . filemtime(dirna
             <a href="export-brevo.php">Update Brevo mailing list</a>
           </div>
         </details>
+        <details class="dropdown<?= $isActive(['email', 'email-log']) ?>">
+          <summary class="menu-top">Email</summary>
+          <div class="dropdown-menu">
+            <a href="email.php">Email members</a>
+            <a href="email-log.php">Sent emails</a>
+          </div>
+        </details>
         <details class="dropdown<?= $isActive(['users', 'user-edit', 'groups', 'companies', 'interests', 'brevo-lists', 'membership-types', 'life-renewals', 'login-activity']) ?>">
           <summary class="menu-top">Management</summary>
           <div class="dropdown-menu">

@@ -8,6 +8,8 @@ require dirname(__DIR__) . '/src/bootstrap.php';
 require dirname(__DIR__) . '/src/members.php';
 require dirname(__DIR__) . '/src/subscriptions.php';
 require dirname(__DIR__) . '/src/access_items.php';
+require dirname(__DIR__) . '/src/brevo.php';
+require dirname(__DIR__) . '/src/email.php';
 
 $user = require_login();
 
@@ -77,6 +79,7 @@ render('member-edit', [
     'statuses'          => MEMBER_STATUSES,
     'subscriptions'     => $member ? member_subscriptions($id) : [],
     'accessItems'       => $member ? member_access_items($id) : [],
+    'emails'            => $member ? member_emails($id) : [],
     'bandsHeld'         => $member ? items_held($id, 'wristband') : 0,
     'keysHeld'          => $member ? array_filter(array_map(fn($t) => items_held($id, $t), array_combine(YEARLY_KEY_TYPES, YEARLY_KEY_TYPES))) : [],
     'itemValues'        => $itemValues,
