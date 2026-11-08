@@ -26,19 +26,32 @@ function requested_member_status(): string
 }
 
 /**
- * Members with their latest subscription expiry, sorted by surname.
- * $status is a member status or 'all'; $q searches names, email and membership number.
+ * Members with their latest subscription expiry, and the company that paid for that
+ * subscription (if any), sorted by surname.
+ * $status is a member status or 'all'; $q searches names, email and membership number;
+ * $companyId limits it to members whose latest subscription that company paid for.
  */
-function member_list(string $status, string $q = ''): array
+function member_list(string $status, string $q = '', ?int $companyId = null): array
 {
     $sql = 'SELECT m.id, m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email, m.phone, m.status,
                    (SELECT MAX(s.expiry_date)
                       FROM subscription_members sm
                       JOIN subscriptions s ON s.id = sm.subscription_id
-                     WHERE sm.member_id = m.id) AS expiry_date
+                     WHERE sm.member_id = m.id) AS expiry_date,
+                   c.id AS company_id, c.name AS company_name
               FROM members m
+              LEFT JOIN companies c ON c.id = (SELECT s.company_id
+                                                 FROM subscription_members sm
+                                                 JOIN subscriptions s ON s.id = sm.subscription_id
+                                                WHERE sm.member_id = m.id
+                                                ORDER BY s.expiry_date DESC, s.id DESC
+                                                LIMIT 1)
              WHERE 1 = 1';
     $params = [];
+    if ($companyId !== null) {
+        $sql .= ' AND c.id = ?';
+        $params[] = $companyId;
+    }
     if ($status !== 'all') {
         $sql .= ' AND m.status = ?';
         $params[] = $status;
