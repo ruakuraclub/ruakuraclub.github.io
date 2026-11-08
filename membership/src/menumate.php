@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 // Menumate patron import: Members.csv, laid out like samples/menumate/Members.csv.
 // 40 columns, no header row, no quotes, Windows line endings, plain ASCII.
-// Most columns are fixed values or deliberately empty.
+// Most columns are fixed values or deliberately empty. Where each column ends up in
+// Menumate (CONTACTS / CONTACTCARDS fields) is noted in IMPROVEMENTS.md.
 // Needs subscriptions.php and cards.php (for CLUB_ID).
 
 const MENUMATE_COLUMN_COUNT = 40;
@@ -31,6 +32,13 @@ function menumate_text(?string $value): string
     return trim(preg_replace('/ {2,}/', ' ', $value));
 }
 
+/** NZ mobile numbers start 02 (or +64 2 / 64 2). */
+function menumate_is_mobile(string $phone): bool
+{
+    $digits = preg_replace('/\D/', '', $phone);
+    return str_starts_with($digits, '02') || str_starts_with($digits, '642');
+}
+
 /** One line of the file for a person (without the line ending). */
 function menumate_line(array $row): string
 {
@@ -45,6 +53,16 @@ function menumate_line(array $row): string
     $cols[13] = $number;
     $cols[15] = menumate_text($row['first_name']);
     $cols[17] = menumate_text($row['last_name']);
+
+    // Columns 3, 4 and 21 were worked out from the order Menumate's importer writes its
+    // fields (PHONE, MOBILE, ... DATEOFBIRTH), not seen in a real import yet.
+    $phone = menumate_text($row['phone'] ?? '');
+    if ($phone !== '') {
+        $cols[menumate_is_mobile($phone) ? 4 : 3] = $phone;
+    }
+    if (!empty($row['date_of_birth'])) {
+        $cols[21] = date('d/m/Y', strtotime($row['date_of_birth']));
+    }
     return implode(',', $cols);
 }
 

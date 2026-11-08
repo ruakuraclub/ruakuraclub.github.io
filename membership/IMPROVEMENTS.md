@@ -28,3 +28,28 @@ All three are built: **Print cards** (`RuakuraClub.xlsx` for the POINTMAN card d
 
 - Brevo was tested against a stand-in, not the real API. Do the first real run against test lists.
 - Brevo contacts only get FIRSTNAME and LASTNAME. Membership number or expiry could be sent too, once matching contact attributes exist in Brevo.
+
+## Menumate import columns
+
+Worked out by decoding a copy of Menumate's database against past imports (`Import\Old\members_*.csv`). Menumate matches members by `MEMBER_NUMBER`, so re-importing updates rather than duplicates.
+
+| Col | Export value | Menumate field | |
+|---|---|---|---|
+| 1 | `2` | `CONTACTS.CONTACT_TYPE` (2 = member) | confirmed |
+| 2 | preferred name, else first name | `CONTACTS.NAME` (shown at the till) | confirmed |
+| 3 | phone, if not a mobile | `CONTACTS.PHONE` | from field order |
+| 4 | phone, if a mobile (02…) | `CONTACTS.MOBILE` | from field order |
+| 7 | company | `CONTACTS.MAILING_ADDRESS` | confirmed |
+| 10 | `1315` + number | `CONTACTCARDS.SWIPE_CARD` (what the card's QR code scans as) | confirmed |
+| 11 | `+` | not stored (probably "add/update") | unknown |
+| 12 | `0` | `CONTACTS.TOTAL_SPENT` | confirmed value, field by order |
+| 13 | membership number | `CONTACTS.MEMBER_NUMBER` | confirmed |
+| 14 | `-1` | `CONTACTS.SITE_ID` | confirmed |
+| 15 | first name | `CONTACTS.FIRST_NAME` | confirmed |
+| 17 | surname | `CONTACTS.LAST_NAME` | confirmed |
+| 21 | date of birth, dd/mm/yyyy | `CONTACTS.DATEOFBIRTH` | from field order |
+| 36–40 | `Y,Y,N,N,N` | not stored on the member record | unknown |
+
+Likely but unused: 5 `PHONE_EXTENSION`, 6 `EMAIL`, 8 `INITIALS`, 9 `PIN`, 16 `MIDDLE_NAME`, 18 `SEX`, 19 `TAB_ENALBED`, 20 `PAYROLL_ID`, 22 `KNOWN_AS`.
+
+To confirm the "from field order" columns, import one test member with a marker in each empty column (`C03`, `C04`, …) into a test copy of Menumate and check where each landed. Check the date of birth shows correctly after the first real import.

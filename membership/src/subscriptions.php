@@ -378,7 +378,7 @@ function current_subscription_people(string $today, ?string $notSentColumn = nul
     $sql = "SELECT sm.subscription_id, sm.member_id, sm.role,
                    sm.card_printed_date, sm.menumate_updated_date,
                    s.expiry_date, t.is_life, c.name AS company_name,
-                   m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email
+                   m.membership_number, m.first_name, m.last_name, m.preferred_name, m.email, m.phone, m.date_of_birth
               FROM subscription_members sm
               JOIN subscriptions s ON s.id = sm.subscription_id
               JOIN membership_types t ON t.id = s.membership_type_id
@@ -386,10 +386,12 @@ function current_subscription_people(string $today, ?string $notSentColumn = nul
               JOIN members m ON m.id = sm.member_id
              WHERE m.status = 'active'
                AND s.expiry_date >= ?
-               AND s.expiry_date = (SELECT MAX(s2.expiry_date)
-                                      FROM subscription_members sm2
-                                      JOIN subscriptions s2 ON s2.id = sm2.subscription_id
-                                     WHERE sm2.member_id = m.id)";
+               AND s.id = (SELECT s2.id
+                             FROM subscription_members sm2
+                             JOIN subscriptions s2 ON s2.id = sm2.subscription_id
+                            WHERE sm2.member_id = m.id
+                            ORDER BY s2.expiry_date DESC, s2.id DESC
+                            LIMIT 1)";
     if ($notSentColumn !== null) {
         if (!in_array($notSentColumn, SENT_DATE_COLUMNS, true)) {
             throw new InvalidArgumentException("Unknown column {$notSentColumn}");
