@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kegs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Kegs</h1>
+    <input type="text" id="searchKeg" placeholder="Search Kegs">
+    <button onclick="searchKegs()">Search</button>
+    <div id="kegList"></div>
+    <h2>Add/Edit Keg</h2>
+    <form id="kegForm">
+        <input type="hidden" id="kegId">
+        <label for="kegName">Keg Name:</label>
+        <input type="text" id="kegName" required>
+        <label for="kegVolume">Volume:</label>
+        <input type="number" id="kegVolume" required>
+        <label for="kegBeverage">Beverage:</label>
+        <select id="kegBeverage" required></select>
+        <label for="kegPrice">Price:</label>
+        <input type="number" step="0.01" id="kegPrice" required>
+        <label for="kegHalf">Half:</label>
+        <input type="number" step="0.01" id="kegHalf" required>
+        <label for="kegHandle">Handle:</label>
+        <input type="number" step="0.01" id="kegHandle" required>
+        <label for="kegJug">Jug:</label>
+        <input type="number" step="0.01" id="kegJug" required>
+        <button type="submit">Save</button>
+    </form>
+    <script src="kegs.js"></script>
+</body>
+</html>

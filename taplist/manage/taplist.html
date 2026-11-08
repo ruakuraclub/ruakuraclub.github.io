@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-Service Taps</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>In-Service Taps</h1>
+    <div id="tapList"></div>
+    <script id="tap-template" type="x-tmpl-mustache">
+        {{#taps}}
+        <div class="tap">
+            <h2>{{badge}}</h2>
+            <p>Brewery: {{brewery}}</p>
+            <p>Style: {{style}}</p>
+            <p>ABV: {{abv}}</p>
+            <p>Half: ${{half}}</p>
+            <p>Handle: ${{handle}}</p>
+            <p>Jug: ${{jug}}</p>
+            <p>Age: {{age}} days</p>
+        </div>
+        {{/taps}}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.2.0/mustache.min.js"></script>
+    <script src="taps.js"></script>
+</body>
+</html>

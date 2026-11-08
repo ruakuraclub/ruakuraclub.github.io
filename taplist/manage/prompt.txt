@@ -1,0 +1,31 @@
+Can you assist with writing an website using HTML, Javascript, and MySQL + PHP (version 8.2) if I describe what it needs to do?
+
+The MySQL database has the following tables:
+taps ( id INT, name TEXT, in_service BOOLEAN, keg_id INT )
+style ( id INT, name TEXT )
+brewery ( id INT, name TEXT, location TEXT )
+beverage ( id INT, name TEXT, badge TEXT, abv 2DP, style_id INT, brewery_id INT )
+kegs ( id INT, name TEXT, volume INT, beverage_id INT, price 2DP, half 2DP, handle 2DP, jug 2DP, date_in DATE, date_served DATE, empty DATE, date_counted DATE, halves_served INT, handles_served INT, jugs_served INT )
+
+The website should allow the user to do the following:
+A Styles page should provide a way to list (with search), insert and edit styles, styles cannot be deleted if there is a beverage of that style.
+A Breweries page list (with search), insert and edit breweries, breweries cannot be deleted if there is a beverage belonging to it.
+A Kegs page should list (with search), insert and edit kegs, kegs cannot be deleted, date_in should default to "today" automatically when inserting.
+A Taps page will maintain the in_service status of 12 taps, link keg to tap 1:1 relationship, unique.
+The Tap page should allow the keg.date_served to be recorded (default "today"), and a button to mark the keg empty should unlink it from the tap & put todays date in the kegs.empty value.
+
+A Consumption page should display 12 kegs per page (order by date_served DESC) and allow the _served values to be edited, date_counted should update to today IF one of the _served values has changed.
+
+The landing page should be the Taps page, with a menu to select the rest of the available options.
+
+
+Add a backend function that will return data for the in_service = TRUE taps:
+the data will be used with a moustache.js template that has the following fields:
+badge, brewery, style, abv, half, handle, jug, age ( today - date_served )
+
+
+Add authentication using wordpress logins on the same domain (this site will be hosted in a subdomain).
+e.g. https://taps.mysite.dev with a self-hosted wordpress site at https://mysite.dev
+
+Add authentication to the backend for all actions except 'get_in_service_taps'
+

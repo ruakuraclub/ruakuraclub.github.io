@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Styles</h1>
+    <input type="text" id="searchStyle" placeholder="Search Styles">
+    <button onclick="searchStyles()">Search</button>
+    <div id="styleList"></div>
+    <h2>Add/Edit Style</h2>
+    <form id="styleForm">
+        <input type="hidden" id="styleId">
+        <label for="styleName">Style Name:</label>
+        <input type="text" id="styleName" required>
+        <button type="submit">Save</button>
+    </form>
+    <script src="styles.js"></script>
+</body>
+</html>

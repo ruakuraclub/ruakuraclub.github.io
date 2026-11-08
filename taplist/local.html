@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Andrew Clow, from original code by Phil Murray">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+
+    <title>RCC Tap List</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Sunflower:300,500,700" rel="stylesheet"> -->
+    <link href="http://localhost/taplist/assets/css/taplist.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js"></script>
+
+  </head>
+
+  <body onload="startTime()">
+    <div class="container">
+      <div class="box header">
+        <div class="logo"></div>
+          <div class="title">
+            <h1 id="title">Loading...</h1>
+          </div>
+        <div id="clock" class="clock"></div>
+      </div>
+      <div id="taps" class="box taplist"></div>
+      <!-- <div id="wines" class="box winelist"></div> -->
+      <div id="footer" class="box footer"><!-- footer placed here by headerFooter function --></div>
+    </div>
+    
+    <script type="text/javascript">
+      var messagesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=751801606&single=true&output=csv";
+      var taplistURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=0&single=true&output=csv";
+      var winesURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeO6qzR59_2q-HSg6Z9zSyVwdFJWsFL5Duny50iR2n0ONqKeNmIQmUlFmi1SNBXXjpG_4Y0Yfztk3Z/pub?gid=473881078&single=true&output=csv";
+      
+      function init() {
+        Papa.parse( messagesURL, { download: true, header: true, complete: headerFooter } );
+        Papa.parse( taplistURL, { download: true, header: true, complete: displayTaps } );
+        // Papa.parse( winesURL, { download: true, header: true, complete: displayWines } );
+      }
+
+      function flip(){
+        var beersDiv = document.getElementById('taps');
+        var winesDiv = document.getElementById('wines');
+        if ( beersDiv.classList.contains('hidden') ) {
+          winesDiv.classList.add('hidden');
+          beersDiv.classList.remove('hidden');
+        }else{
+          winesDiv.classList.remove('hidden');
+          beersDiv.classList.add('hidden');
+        }
+      }
+
+      function headerFooter( results ) {
+        var footerMessage = '';
+        var footerItems = 0;
+        var separator = '&nbsp;&nbsp;<mark class="fade">|</mark>&nbsp;&nbsp;';
+        var sheet = results.data;
+        if ( sheet[0]['Title'] == '' ) { // No title defined
+          sheet[0]['Title'] = 'Welcome to Ruakura Club';
+        }
+        if ( document.getElementById( "title" ).innerHTML !== sheet[0]['Title'] ) {
+          document.getElementById( "title" ).innerHTML = sheet[0]['Title'];
+        }
+
+        for (var i = 0; i < sheet.length; i++) {
+          message = sheet[i]
+          if (footerMessage == '' ) {
+            footerItems++;
+            footerMessage = message['Footer'];
+          }else if ( message['Footer'] ) {
+            footerItems++;
+            footerMessage = footerMessage + separator + message['Footer'];
+          }
+        }
+
+        if ( footerMessage === '' ) {
+          // No footer set, show the url centered.
+          footerMessage = 'ruakura-club.co.nz';
+        }else if ( !footerMessage.includes( 'ruakura-club.co.nz' ) ) {
+          // footer doesn't include the url, add it at the end.
+          footerMessage = footerMessage + separator + 'ruakura-club.co.nz';
+        }
+
+        // get current value of the marquee text so we can compare it to what we've just built
+        if ( document.getElementById( "footerScroll" ) ) {
+          var currentValue = document.getElementById( "footerScroll" ).innerHTML;
+        }else{
+          var currentValue = document.getElementById( "footer" ).innerHTML;
+        }
+        if ( currentValue !== footerMessage ) {
+          if ( footerItems > 1 ) {
+            // multiple items, set it to scroll
+            footerMessage = '<p class="marquee"><span id="footerScroll">' + footerMessage + '</span></p>';
+          }else{
+            // no scroll if there's only one item.
+            footerMessage = '<p class="singlefooter">' + footerMessage + '</p>';
+          }
+          // set the footer element!
+          document.getElementById( "footer" ).innerHTML = footerMessage;
+          if ( document.getElementById( "footerScroll" ) ) {
+            // calculate the speed of the scroll using a ratio that allows for full-width message to take 30sec to scroll.
+            // this will mean minimum 30secs for short messages, but all messages move at same visual speed.
+            var timeInSeconds = 30 * Math.ceil( document.getElementById( "footerScroll" ).clientWidth / document.getElementById( "footer" ).offsetWidth );
+            document.getElementById( "footerScroll" ).style.setProperty( "animation", "marquee " + timeInSeconds + "s linear infinite" );
+          }
+        }
+      }
+
+      function displayTaps( results ) {
+        var beerList = { beers: [] };
+        var sheet = results.data;
+
+        // sheet = sheet.filter( entries => ( (entries.Class).toLowerCase() !== 'offline' ) );
+        for(var idx = 0; idx < 12; idx++ ) {
+          var tap = sheet[idx];
+          if ( tap['Class'] == 'offline' ) { continue; } // Skip offline taps.
+
+          if ( tap['Name'] == '' ) { // Tap with no beer assigned
+            tap['Class'] = 'nis';
+            tap['Name'] = 'Tap temporarily offline'; // Non-Breaking Space, ensures row heights match up
+          }
+
+          if( tap['Badge'] !== '' && !tap['Badge'].includes('http') ){
+            tap['Badge'] = '/assets/badges/'+tap['Badge'];
+          }
+
+          if ( Number.parseFloat(tap['left']) ) {
+            var volumeRemaining = Number.parseFloat(tap['left']);
+            if (volumeRemaining < 5) {
+              tap['gradientClass'] = 'empty';
+            } else if (volumeRemaining <= 15) {
+              tap['gradientClass'] = 'fifteen';
+            } else if ( volumeRemaining > 15 && volumeRemaining <= 30) {
+              tap['gradientClass'] = 'thirty';
+            } else if ( volumeRemaining > 30 && volumeRemaining <= 50) {
+              tap['gradientClass'] = 'fifty';
+            } else if ( volumeRemaining > 50 && volumeRemaining <= 70) {
+              tap['gradientClass'] = 'seventy';
+            } else if ( volumeRemaining > 70 ) {
+              tap['gradientClass'] = 'full';
+            } else {
+              tap['gradientClass'] = '';
+            }
+          }
+
+          var field = 'ABV'
+          var abv = parseFloat(tap[field] )
+          if ( !isNaN(abv)) {
+            tap[field] = sprintf( "%0.1f", abv) + '%';
+          } else if ( tap[field] == '' ) {
+            tap[field] = ' ';
+          }
+
+          field = 'half-price'
+          var price = parseFloat( tap[field] )
+          if ( !isNaN( price ) ) {
+            tap[field] = "$" + sprintf( "%0.2f", price);
+          } else if ( tap[field] == '' ) {
+            tap[field] = ( tap['Class'] == 'nis' ? ' ' : '-' );
+          }
+
+          field = 'handle-price'
+          price = parseFloat( tap[field] )
+          if ( !isNaN( price ) ) {
+            tap[field] = "$" + sprintf( "%0.2f", price);
+          } else if ( tap[field] == '' ) {
+            tap[field] = ( tap['Class'] == 'nis' ? ' ' : '-' );
+          }
+
+          field = 'jug-price'
+          price = parseFloat( tap[field] )
+          if ( !isNaN( price ) ) {
+            tap[field] = "$" + sprintf( "%0.2f", price);
+          } else if ( tap[field] == '' ) {
+            tap[field] = ( tap['Class'] == 'nis' ? ' ' : '-' );
+          }
+
+          if ( tap['Class'] == 'new' ) {
+            tap['Indicator'] = 'green-star';
+          } else if ( tap['Class'] == 'special' ) {
+            tap['Indicator'] = 'special-star';
+          } else if ( tap['Class'] == 'low' ) {
+            tap['Indicator'] = 'low-keg';
+          } else {
+            tap['Indicator'] = 'no-star';
+          }
+
+          beerList.beers.push( tap );
+        }
+        
+        var templateHtml = document.getElementById( 'tap-template' ).innerHTML;
+        document.getElementById( "taps" ).className = "box taplist";
+       
+        var renderedList  = Mustache.render( templateHtml, beerList );
+
+        if ( document.getElementById( "taps" ).innerHTML !== renderedList ) {
+          document.getElementById( "taps" ).innerHTML = renderedList;
+          resizeContents();
+        }
+      }
+
+      // function displayWines( results ) {
+      //   var wineList = { wines: [] };
+      //   var sheet = results.data;
+
+      //   for (var idx = 0; idx < sheet.length; idx++){
+      //     var wine = sheet[idx];
+      //     if (wine['Glass_150ml'] !== '') {
+      //       var price = parseFloat( wine['Glass_150ml'] )
+      //       wine['Glass_150ml'] = "$" + sprintf( "%0.2f", price);
+      //     }
+      //     if (wine['Bottle_200ml'] !== '') {
+      //       var price = parseFloat( wine['Bottle_200ml'] )
+      //       wine['Bottle_200ml'] = "$" + sprintf( "%0.2f", price);
+      //     }
+      //     if (wine['Bottle_750ml'] !== '') {
+      //       var price = parseFloat( wine['Bottle_750ml'] )
+      //       wine['Bottle_750ml'] = "$" + sprintf( "%0.2f", price);
+      //     }
+      //   }
+        
+      //   var whites = sheet.filter( entries => ( entries.Style == 'White' ) );
+      //   var reds = sheet.filter( entries => ( entries.Style == 'Red' ) );
+      //   var rose = sheet.filter( entries => ( entries.Style == 'Rosé' ) );
+      //   var sparkling = sheet.filter( entries => ( entries.Style == 'Sparkling' ) );
+
+      //   if ( whites.length > 0 ) {
+      //     var wine = [];
+      //     wine['Name'] = "White Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "150ml";
+      //     wine['bottle'] = "750ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < whites.length; idx++ ) {
+      //     var wine = whites[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = wine['Glass_150ml'];
+      //     wine['bottle'] = wine['Bottle_750ml'];          
+      //     wineList.wines.push( wine );
+      //   }
+
+      //   if ( rose.length > 0 ) {
+      //     var wine = [];
+      //     wine['Name'] = "Rosé Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "150ml";
+      //     wine['bottle'] = "750ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < rose.length; idx++ ) {
+      //     var wine = rose[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = wine['Glass_150ml'];
+      //     wine['bottle'] = wine['Bottle_750ml'];          
+      //     wineList.wines.push( wine );
+      //   }
+
+      //   if ( reds.length > 0 ) {
+      //     var wine = [];
+      //     wine['Name'] = "Red Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "150ml";
+      //     wine['bottle'] = "750ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < reds.length; idx++ ) {
+      //     var wine = reds[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = wine['Glass_150ml'];
+      //     wine['bottle'] = wine['Bottle_750ml'];          
+      //     wineList.wines.push( wine );
+      //   }
+        
+      //   if ( sparkling.length > 0 ) {
+      //     var wine = [];
+      //     wine['class'] = "wine";
+      //     wine['Name'] = "Sparkling Wines";
+      //     wine['class'] = "wineLabel";
+      //     wine['glass'] = "";
+      //     wine['bottle'] = "200ml";
+      //     wineList.wines.push( wine );
+      //   }
+      //   for(var idx = 0; idx < sparkling.length; idx++ ) {
+      //     var wine = sparkling[idx];
+      //     wine['class'] = "wine";
+      //     wine['glass'] = "";
+      //     wine['bottle'] = wine['Bottle_200ml'];
+      //     wineList.wines.push( wine );
+      //   }
+
+      //   var templateHtml = document.getElementById( 'wine-template' ).innerHTML;
+      //   document.getElementById( "wines" ).className = "hidden box winelist";
+       
+      //   var renderedList  = Mustache.render( templateHtml, wineList );
+
+      //   if ( document.getElementById( "wines" ).innerHTML !== renderedList ) {
+      //     document.getElementById( "wines" ).innerHTML = renderedList;
+      //     resizeContents();
+      //   }
+      // }
+
+      function startTime(){
+        var time = new Date()
+        var hr = time.getHours()
+        var min = time.getMinutes()
+        var sec = time.getSeconds()
+        var ampm = " pm "
+        if (hr < 12){
+          ampm = " am "
+        }
+        if (hr > 12){
+          hr -= 12
+        }
+        if (hr < 10){
+          hr = " " + hr
+        }
+        if (min < 10){
+          min = "0" + min
+        }
+        if (sec < 10){
+          sec = "0" + sec
+        }
+        document.getElementById( 'clock' ).innerHTML = hr + ":" + min + ampm
+        setTimeout( "startTime()", 1000 )
+      }
+
+      function resizeContents() {
+        // do not use font-size rem on elements with "resizable" class!
+        // do not set font-size via CSS for elements with "resizable" class!
+        var resizableDivs = document.getElementsByClassName('resizable');
+        for (index = 0; index < resizableDivs.length; ++index) {
+          var div = resizableDivs[index];
+          if (div.innerText != '') {
+            var divWidth = div.clientWidth;
+            var divHeight = div.clientHeight;
+
+            var contentWidth = div.scrollWidth;
+            var contentHeight = div.scrollHeight;
+
+            var fontSize = div.style.fontSize;
+            // trims the "px" off the font-size
+            fontSize = Number(fontSize.substring(0, fontSize.length - 2));
+
+            while (contentWidth <= divWidth && contentHeight <= divHeight) {
+              // increase font-size unless it will cause div to overflow width/height.
+              fontSize += 1;
+              div.style.fontSize = fontSize + 'px';
+              contentWidth = div.scrollWidth;
+              contentHeight = div.scrollHeight;
+            }
+
+            while (contentWidth > divWidth || contentHeight > divHeight) {
+              // shrink font-size until it fits within div width & height.
+              fontSize -= 1;
+              div.style.fontSize = fontSize + 'px';
+
+              contentWidth = div.scrollWidth;
+              contentHeight = div.scrollHeight;
+            }
+          }
+        }
+      }
+
+      // Reload the page every 120 seconds (120000 milliseconds)
+      window.addEventListener( "DOMContentLoaded", init );
+      window.setInterval( function() { init() }, 120000 );
+
+      // Flip from beers to wine list and back every 20 seconds
+      // window.addEventListener( "DOMContentLoaded", flip() );
+      // window.setInterval( function() { flip() }, 20000 );
+    </script>
+
+    <script id="tap-template" type="text/html">
+      <div class="labelHeader">
+        <div class="labels">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+          <div class="jug">Jug</div>
+        </div>
+        <div class="labels">
+          <div class=""></div>
+          <div class="abv">ABV</div>
+          <div class="half">Half</div>
+          <div class="handle">Handle</div>
+          <div class="jug">Jug</div>
+        </div>
+      </div>
+      <div class="theTaps">
+        {{#beers}}
+        <div class="beerDetails {{Class}} {{gradientClass}}">
+          <div class="badge">
+            <img src="{{Badge}}">
+          </div>
+          <div class="beerName resizable" style="font-size: 40px;">{{Name}}</div>
+          <div class="{{Indicator}}"></div>
+          <div class="brewery">{{Brewery}}</div>
+          <div class="beerStyle">{{Style}}</div>
+          <div class="values abv">{{ABV}}</div>
+          <div class="values half">{{half-price}}</div>
+          <div class="values handle">{{handle-price}}</div>
+          <div class="values jug">{{jug-price}}</div>
+        </div>
+        {{/beers}}
+      </div>
+    </script>
+    <!-- <script id="wine-template" type="text/html">
+      <div class="theWines">
+        {{#wines}}
+        <div class="wineDetails {{class}}">
+          <div class="resizable" style="font-size: 40px;">{{Name}}</div>
+          <div class="wineGlass">{{glass}}</div>
+          <div class="wineBottle">{{bottle}}</div>
+        </div>
+        {{/wines}}
+      </div>
+    </script> -->
+
+
+  </body>
+</html>
+
+<!-- Taplist code/design adapted from the work of Phil @ Brewaucracy. -->

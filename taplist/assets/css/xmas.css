@@ -1,9 +1,12 @@
 #wire{
+  display: flex;
+  justify-content: center;
   text-align: center;
   white-space: nowrap;
   position: absolute;
   padding: 0;
-  width: 99%;
+  margin-left: 10px;
+  width: 95%;
   top: -120px;
   border-bottom: 3px solid #222;
   height: 100px;

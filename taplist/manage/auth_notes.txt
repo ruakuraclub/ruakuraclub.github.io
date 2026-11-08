@@ -1,0 +1,162 @@
+Integrating WordPress authentication with your custom subdomain application can be achieved using the WordPress REST API for authentication. Here's a high-level approach to achieve this:
+
+1. Set Up JWT Authentication for WordPress
+First, you'll need to install a JWT (JSON Web Token) authentication plugin for your WordPress site. One popular plugin is "JWT Authentication for WP REST API". Follow these steps:
+
+Install and activate the plugin:
+
+Go to your WordPress admin dashboard.
+
+Navigate to Plugins > Add New.
+
+Search for "JWT Authentication for WP REST API".
+
+Install and activate the plugin.
+
+Configure the plugin:
+
+Add the following constants to your wp-config.php file to configure the JWT plugin:
+  define('JWT_AUTH_SECRET_KEY', 'your-secret-key');
+  define('JWT_AUTH_CORS_ENABLE', true);
+
+Replace 'your-secret-key' with a secure, random string.
+
+2. Create the Login Form on Your Subdomain
+Create a login form in your subdomain application that will authenticate users using the WordPress REST API.
+
+HTML (login.html)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Login</h1>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <button type="submit">Login</button>
+    </form>
+    <div id="loginMessage"></div>
+    <script src="login.js"></script>
+</body>
+</html>
+
+Javascript (login.js)
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch('https://mysite.dev/wp-json/jwt-auth/v1/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.token) {
+            localStorage.setItem('jwt_token', data.token);
+            document.getElementById('loginMessage').innerText = 'Login successful!';
+            window.location.href = 'index.html'; // Redirect to the main page
+        } else {
+            document.getElementById('loginMessage').innerText = 'Login failed: ' + data.message;
+        }
+    });
+});
+
+3. Secure Your Application Pages
+For each of your application pages, check if the user is authenticated by verifying the JWT token.
+
+JavaScript (auth.js)
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) {
+        window.location.href = 'login.html'; // Redirect to login if not authenticated
+    } else {
+        fetch('https://mysite.dev/wp-json/wp/v2/users/me', {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 'jwt_auth_invalid_token') {
+                localStorage.removeItem('jwt_token');
+                window.location.href = 'login.html'; // Redirect to login if token is invalid
+            }
+        });
+    }
+});
+
+Include this auth.js file in your other HTML pages to protect them. For example:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Protected Content</h1>
+    <div id="content">
+        <!-- Content for authenticated users -->
+    </div>
+    <script src="auth.js"></script>
+    <script src="other-scripts-for-the-page-here.js"></script>
+</body>
+</html>
+
+To require authentication for all backend requests except for the get_in_service_taps action, you can add an authentication check at the beginning of your backend.php file. You'll use a conditional to bypass the authentication for the specific action.
+
+Here's how you can do it:
+
+Create a function to verify the JWT token.
+
+Check for the action at the beginning of your file and conditionally require authentication.
+
+Updated backend.php with Authentication Check
+// after $action = $_GET['action'];
+function verify_jwt_token($token) {
+  $url = 'https://mysite.dev/wp-json/jwt-auth/v1/token/validate';
+  $headers = array( 'Authorization: Bearer ' . $token );
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  $result = curl_exec($ch);
+  $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  return $httpcode === 200;
+  } if ($action !== 'get_in_service_taps') {
+    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+      echo json_encode(array('status' => 'error', 'message' => 'No authorization header found'));
+    exit;
+  }
+  $auth_header = $_SERVER['HTTP_AUTHORIZATION'];
+  list($bearer, $token) = explode(' ', $auth_header);
+  if ($bearer !== 'Bearer' || !verify_jwt_token($token)) {
+    echo json_encode(array('status' => 'error', 'message' => 'Unauthorized'));
+    exit;
+  }
+}
+// Existing code for actions...
+
+
+
+Adjust your front-end JavaScript to call the specific action files as needed. For example:
+
+For styles, use styles.php?action=get_styles.
+
+For breweries, use breweries.php?action=get_breweries.
+
+For kegs, use kegs.php?action=get_kegs.
+
+For taps, use taps.php?action=get_taps.
+
+For consumption, use consumption.php?action=get_consumption.

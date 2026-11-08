@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breweries</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Breweries</h1>
+    <input type="text" id="searchBrewery" placeholder="Search Breweries">
+    <button onclick="searchBreweries()">Search</button>
+    <div id="breweryList"></div>
+    <h2>Add/Edit Brewery</h2>
+    <form id="breweryForm">
+        <input type="hidden" id="breweryId">
+        <label for="breweryName">Brewery Name:</label>
+        <input type="text" id="breweryName" required>
+        <label for="breweryLocation">Location:</label>
+        <input type="text" id="breweryLocation" required>
+        <button type="submit">Save</button>
+    </form>
+    <script src="breweries.js"></script>
+</body>
+</html>
