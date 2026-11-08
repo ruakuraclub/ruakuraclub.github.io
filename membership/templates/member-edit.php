@@ -186,7 +186,7 @@ $field = function (string $col, string $label, string $type = 'text', string $at
     <fieldset>
       <legend>Membership</legend>
       <div class="grid">
-        <?= $field('membership_number', 'Membership (card) number', 'text', 'inputmode="numeric" pattern="[0-9]*" maxlength="9"') ?>
+        <?= $field('membership_number', $member ? 'Membership (card) number' : 'Membership (card) number (next free)', 'text', 'inputmode="numeric" pattern="[0-9]*" maxlength="9" data-select-on-focus') ?>
         <label>Status
           <select name="status">
             <?php foreach ($statuses as $s): ?>
@@ -241,12 +241,23 @@ $field = function (string $col, string $label, string $type = 'text', string $at
 
     <fieldset>
       <legend>Nominators (new members)</legend>
+      <p class="hint">Start typing an active member's name or card number to pick them; the other box fills in.</p>
       <div class="grid">
-        <?= $field('nominator1_name', 'Nominator 1 – name', 'text', 'maxlength="150"') ?>
-        <?= $field('nominator1_number', 'Nominator 1 – card number', 'text', 'maxlength="20"') ?>
-        <?= $field('nominator2_name', 'Nominator 2 – name', 'text', 'maxlength="150"') ?>
-        <?= $field('nominator2_number', 'Nominator 2 – card number', 'text', 'maxlength="20"') ?>
+        <?= $field('nominator1_name', 'Nominator 1 – name', 'text', 'maxlength="150" list="nominator-names" autocomplete="off" data-nominator="1" data-part="name"') ?>
+        <?= $field('nominator1_number', 'Nominator 1 – card number', 'text', 'maxlength="20" list="nominator-numbers" autocomplete="off" data-nominator="1" data-part="number"') ?>
+        <?= $field('nominator2_name', 'Nominator 2 – name', 'text', 'maxlength="150" list="nominator-names" autocomplete="off" data-nominator="2" data-part="name"') ?>
+        <?= $field('nominator2_number', 'Nominator 2 – card number', 'text', 'maxlength="20" list="nominator-numbers" autocomplete="off" data-nominator="2" data-part="number"') ?>
       </div>
+      <datalist id="nominator-names">
+        <?php foreach ($nominators as $n): ?>
+          <option value="<?= e($n['first_name'] . ' ' . $n['last_name']) ?>" label="No. <?= (int) $n['membership_number'] ?>" data-number="<?= (int) $n['membership_number'] ?>"></option>
+        <?php endforeach; ?>
+      </datalist>
+      <datalist id="nominator-numbers">
+        <?php foreach ($nominators as $n): ?>
+          <option value="<?= (int) $n['membership_number'] ?>" label="<?= e($n['first_name'] . ' ' . $n['last_name']) ?>"></option>
+        <?php endforeach; ?>
+      </datalist>
     </fieldset>
 
     <fieldset>

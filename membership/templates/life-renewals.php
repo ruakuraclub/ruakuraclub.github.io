@@ -1,7 +1,8 @@
 <div class="card">
   <h1>Life member renewals <?= e($label) ?></h1>
   <p>Creates a $0 subscription from <?= e(format_date($season)) ?> to <?= e(format_date($expiry)) ?> for each active life member who doesn't have one yet.
-     It copies the people on their last subscription, but not their sub &amp; affiliate clubs, which are chosen each season.</p>
+     It copies the people on their last subscription, but not their sub &amp; affiliate clubs, which are chosen each season.
+     Their cards are marked as printed, since life members keep the card they have.</p>
   <p class="hint">A life member is anyone whose most recent subscription uses a membership type marked "Life membership". Give a new life member their first Life subscription by hand.</p>
   <?php if ($flash): ?>
     <p class="notice" role="status"><?= e($flash) ?></p>

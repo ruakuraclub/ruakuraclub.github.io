@@ -191,3 +191,44 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('live:updated', show);
   show();
 });
+
+// Fields marked data-select-on-focus select their contents when clicked into, so a suggested
+// value (e.g. the next membership number) can simply be typed over.
+document.addEventListener('focusin', function (event) {
+  if (event.target.matches('input[data-select-on-focus]')) {
+    var input = event.target;
+    setTimeout(function () { input.select(); }, 0);   // after the click places the cursor
+  }
+});
+
+// Nominators: picking an active member's name fills in their card number, and typing a
+// card number fills in the name. Only exact matches fill; anything else is left as typed.
+document.addEventListener('DOMContentLoaded', function () {
+  var names = document.getElementById('nominator-names');
+  if (!names) {
+    return;
+  }
+  var byName = new Map();
+  var byNumber = new Map();
+  names.querySelectorAll('option').forEach(function (option) {
+    var key = option.value.trim().toLowerCase();
+    var number = option.getAttribute('data-number');
+    byName.set(key, byName.has(key) ? null : number);   // null: two members share the name
+    byNumber.set(number, option.value);
+  });
+
+  document.addEventListener('input', function (event) {
+    var input = event.target;
+    if (!input.matches('input[data-nominator]')) {
+      return;
+    }
+    var other = document.querySelector('input[data-nominator="' + input.dataset.nominator + '"][data-part="'
+      + (input.dataset.part === 'name' ? 'number' : 'name') + '"]');
+    var match = input.dataset.part === 'name'
+      ? byName.get(input.value.trim().toLowerCase())
+      : byNumber.get(input.value.trim());
+    if (match) {
+      other.value = match;
+    }
+  });
+});

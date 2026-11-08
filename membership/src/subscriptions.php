@@ -342,7 +342,8 @@ function renew_life_members(string $seasonStart): int
         $people = [];
         foreach (subscription_people((int) $row['subscription_id']) as $memberId => $p) {
             if ($p['status'] === 'active') {
-                $people[$memberId] = ['role' => $p['role'], 'card_printed_date' => null, 'groups' => []];
+                // Life members keep their card, so no new one is printed.
+                $people[$memberId] = ['role' => $p['role'], 'card_printed_date' => date('Y-m-d'), 'groups' => []];
             }
         }
         subscription_save(0, [

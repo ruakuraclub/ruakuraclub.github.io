@@ -1,5 +1,8 @@
 <div class="card">
-  <h1>Users</h1>
+  <div class="title-row">
+    <h1>Users</h1>
+    <a class="button" href="login-activity.php">Login activity</a>
+  </div>
   <p class="hint">People who can log in to this site. Everyone has the same access. Deactivated users are logged out straight away and can't log in.</p>
   <?php if ($flash): ?>
     <p class="notice" role="status"><?= e($flash) ?></p>

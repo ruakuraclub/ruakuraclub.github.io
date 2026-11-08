@@ -55,13 +55,11 @@ $asset = fn(string $file): string => 'assets/' . $file . '?v=' . filemtime(dirna
             <a href="brevo-lists.php">Brevo lists</a>
             <a href="membership-types.php">Membership types</a>
             <a href="life-renewals.php">Life member renewals</a>
-            <a href="login-activity.php">Login activity</a>
           </div>
         </details>
         <details class="dropdown align-right<?= $isActive(['profile', 'profile-totp']) ?>">
-          <summary class="menu-top">Profile</summary>
+          <summary class="menu-top"><?= e($user['display_name']) ?></summary>
           <div class="dropdown-menu">
-            <span class="menu-note">Logged in as <?= e($user['display_name']) ?></span>
             <a href="profile.php">My profile</a>
             <form method="post" action="logout.php">
               <?= csrf_field() ?>

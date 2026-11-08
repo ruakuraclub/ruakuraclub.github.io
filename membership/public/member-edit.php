@@ -21,6 +21,9 @@ if ($id && !$member) {
 }
 
 $values = $member ? array_map(fn($v) => (string) $v, $member) : member_defaults();
+if (!$member) {
+    $values['membership_number'] = (string) next_membership_number();   // can be typed over, e.g. when back-filling
+}
 $selectedInterests = $member ? member_interest_ids($id) : [];
 $errors = [];
 $itemValues = access_item_defaults();
@@ -75,6 +78,7 @@ render('member-edit', [
     'member'            => $member,
     'values'            => $values,
     'interests'         => $interests,
+    'nominators'        => nominator_choices($id),
     'selectedInterests' => $selectedInterests,
     'statuses'          => MEMBER_STATUSES,
     'subscriptions'     => $member ? member_subscriptions($id) : [],

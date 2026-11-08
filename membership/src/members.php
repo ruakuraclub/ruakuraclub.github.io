@@ -74,6 +74,24 @@ function member_interest_ids(int $memberId): array
 }
 
 /** Blank values for a new member's form. */
+/** The number after the highest one used, suggested for a new member. */
+function next_membership_number(): int
+{
+    return (int) db()->query('SELECT COALESCE(MAX(membership_number), 0) + 1 FROM members')->fetchColumn();
+}
+
+/** Active members with a number, for suggesting nominators. Leaves out $exceptId. */
+function nominator_choices(int $exceptId): array
+{
+    $stmt = db()->prepare(
+        "SELECT membership_number, first_name, last_name FROM members
+          WHERE status = 'active' AND membership_number IS NOT NULL AND id <> ?
+          ORDER BY last_name, first_name"
+    );
+    $stmt->execute([$exceptId]);
+    return $stmt->fetchAll();
+}
+
 function member_defaults(): array
 {
     $values = array_fill_keys([...array_keys(MEMBER_TEXT_FIELDS), ...array_keys(MEMBER_DATE_FIELDS)], '');

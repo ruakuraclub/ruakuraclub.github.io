@@ -1,4 +1,5 @@
 <div class="card wide">
+  <p class="hint"><a href="users.php">← Users</a></p>
   <h1>Login activity</h1>
   <p class="hint">Logins, failed attempts, lockouts and changes to user accounts. Kept for 12 months.
      "By" shows who made a change to someone else's account.</p>
