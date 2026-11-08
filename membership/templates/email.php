@@ -78,7 +78,7 @@
                   <tr>
                     <td>
                       <?php if ($c['email_ok']): ?>
-                        <input type="checkbox" name="members[]" value="<?= (int) $c['id'] ?>" aria-label="Email <?= e(known_as($c) . ' ' . $c['last_name']) ?>"
+                        <input type="checkbox" name="members[]" value="<?= (int) $c['id'] ?>" data-email="<?= e(mb_strtolower(trim($c['email']))) ?>" aria-label="Email <?= e(known_as($c) . ' ' . $c['last_name']) ?>"
                           <?= ($ticked === null || isset($ticked[(string) $c['id']])) ? ' checked' : '' ?>>
                       <?php endif; ?>
                     </td>
@@ -94,6 +94,24 @@
           </div>
         <?php endif; ?>
       </div>
+
+      <fieldset id="email-preview" class="email-preview">
+        <legend>Preview</legend>
+        <div class="preview-bar">
+          <button type="button" data-nav="first" aria-label="First">|&lt;</button>
+          <button type="button" data-nav="prev" aria-label="Previous">&lt;</button>
+          <span class="preview-position" aria-live="polite"></span>
+          <button type="button" data-nav="next" aria-label="Next">&gt;</button>
+          <button type="button" data-nav="last" aria-label="Last">&gt;|</button>
+        </div>
+        <dl class="details">
+          <dt>To</dt><dd class="preview-to"></dd>
+          <dt>Subject</dt><dd class="preview-subject"></dd>
+        </dl>
+        <p class="preview-message hint"></p>
+        <iframe class="preview-frame" title="Email preview" hidden></iframe>
+        <p class="hint">Close to what members will see; Brevo fills in the final version. Send a test to check it exactly.</p>
+      </fieldset>
 
       <fieldset>
         <legend>Send a test first</legend>

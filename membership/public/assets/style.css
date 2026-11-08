@@ -242,3 +242,10 @@ table.report td { vertical-align: top; }
 
 .qr { display: block; margin: 0 auto 12px; background: #fff; padding: 8px; border-radius: 6px; }
 .secret { font-size: 1rem; word-break: break-all; }
+
+/* Email preview */
+.preview-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.preview-bar button { width: auto; padding: 4px 12px; font-weight: 600; color: var(--accent-ink); background: var(--accent); border: 0; border-radius: 6px; }
+.preview-bar button:disabled { opacity: 0.35; cursor: default; }
+.preview-position { min-width: 9em; text-align: center; color: var(--muted); }
+.preview-frame { width: 100%; height: 70vh; border: 1px solid var(--line); border-radius: 6px; background: #fff; }

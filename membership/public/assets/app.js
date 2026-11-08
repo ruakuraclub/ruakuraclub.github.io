@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           });
           history.replaceState(null, '', url);
+          document.dispatchEvent(new CustomEvent('live:updated'));
         })
         .catch(function (error) {
           if (error.name !== 'AbortError') {
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
     form.addEventListener('change', function (event) {
-      if (event.target.matches('select')) {
+      if (event.target.matches('select, input[type="date"]')) {
         clearTimeout(timer);
         refresh();
       }
@@ -95,4 +96,98 @@ document.addEventListener('click', function (event) {
       menu.removeAttribute('open');
     }
   });
+});
+
+// Email members: preview the chosen template for each ticked member (one per email address),
+// with |< < > >| to flick through them. Refreshes when the template, mode or ticks change.
+document.addEventListener('DOMContentLoaded', function () {
+  var panel = document.getElementById('email-preview');
+  if (!panel) {
+    return;
+  }
+  var form = panel.closest('form');
+  var frame = panel.querySelector('.preview-frame');
+  var message = panel.querySelector('.preview-message');
+  var position = panel.querySelector('.preview-position');
+  var index = 0;
+  var pending = null;
+
+  // Ticked members grouped by email address, in the order shown.
+  function recipients() {
+    var groups = new Map();
+    form.querySelectorAll('input[name="members[]"]:checked').forEach(function (box) {
+      var key = box.getAttribute('data-email');
+      if (!groups.has(key)) {
+        groups.set(key, []);
+      }
+      groups.get(key).push(box.value);
+    });
+    return Array.from(groups.values());
+  }
+
+  function setText(selector, text) {
+    panel.querySelector(selector).textContent = text;
+  }
+
+  function show() {
+    var template = form.querySelector('select[name="template_id"]').value;
+    var mode = form.querySelector('select[name="mode"]').value;
+    var list = mode === 'bcc' ? [[]] : recipients();   // BCC: one email for everyone
+    var empty = !template ? 'Choose a template to see a preview.' : (!list.length ? 'Tick at least one member to see a preview.' : '');
+
+    index = Math.max(0, Math.min(index, list.length - 1));
+    position.textContent = empty ? '' : (mode === 'bcc' ? 'One email for everyone' : (index + 1) + ' of ' + list.length);
+    panel.querySelectorAll('[data-nav]').forEach(function (button) {
+      var back = button.dataset.nav === 'first' || button.dataset.nav === 'prev';
+      button.disabled = !!empty || (back ? index === 0 : index >= list.length - 1);
+    });
+    message.textContent = empty;
+    frame.hidden = !!empty;
+    if (pending) {
+      pending.abort();   // a slower earlier request mustn't overwrite this one
+      pending = null;
+    }
+    if (empty) {
+      setText('.preview-to', '');
+      setText('.preview-subject', '');
+      return;
+    }
+
+    var query = new URLSearchParams({ template: template, mode: mode, members: list[index].join(',') }).toString();
+    // A fresh frame each time: some browsers don't repaint a frame that's re-pointed at a sandboxed page.
+    var fresh = frame.cloneNode(false);
+    fresh.src = 'email-preview.php?' + query;
+    frame.replaceWith(fresh);
+    frame = fresh;
+    pending = new AbortController();
+    fetch('email-preview.php?' + query + '&format=json', { credentials: 'same-origin', signal: pending.signal })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        if (data.error) {
+          message.textContent = data.error;
+          frame.hidden = true;
+          return;
+        }
+        setText('.preview-to', data.to);
+        setText('.preview-subject', data.subject);
+      })
+      .catch(function () {});
+  }
+
+  panel.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-nav]');
+    if (!button) {
+      return;
+    }
+    var count = recipients().length;
+    index = { first: 0, prev: index - 1, next: index + 1, last: count - 1 }[button.dataset.nav];
+    show();
+  });
+  form.addEventListener('change', function (event) {
+    if (event.target.matches('select[name="template_id"], select[name="mode"], input[name="members[]"]')) {
+      show();
+    }
+  });
+  document.addEventListener('live:updated', show);
+  show();
 });

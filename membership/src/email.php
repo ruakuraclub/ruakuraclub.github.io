@@ -29,6 +29,46 @@ function brevo_templates(): array
     return $templates;
 }
 
+/** One template with its HTML, kept for a minute so flicking through a preview doesn't refetch it each time. */
+function brevo_template(int $id): array
+{
+    $cached = $_SESSION['brevo_templates'][$id] ?? null;
+    if ($cached && $cached['fetched'] > time() - 60) {
+        return $cached;
+    }
+    $t = brevo_request('GET', "/smtp/templates/{$id}");
+    $template = [
+        'name'         => (string) ($t['name'] ?? ''),
+        'subject'      => (string) ($t['subject'] ?? ''),
+        'html'         => (string) ($t['htmlContent'] ?? ''),
+        'sender_email' => (string) ($t['sender']['email'] ?? ''),
+        'sender_name'  => (string) ($t['sender']['name'] ?? ''),
+        'fetched'      => time(),
+    ];
+    $_SESSION['brevo_templates'][$id] = $template;
+    return $template;
+}
+
+/**
+ * Fills in {{ params.X }} placeholders (and {{ contact.FIRSTNAME }} / {{ contact.LASTNAME }}) the way
+ * Brevo will, including a | default:"…" fallback. Other template tags are left as they are,
+ * so this is a close preview rather than an exact one. Values are HTML-escaped when $html.
+ */
+function email_fill(string $text, array $params, bool $html): string
+{
+    return preg_replace_callback(
+        '/\{\{\s*(params|contact)\.([A-Za-z0-9_]+)\s*((?:\|[^}]*)?)\}\}/',
+        function (array $m) use ($params, $html): string {
+            $value = (string) ($params[$m[2]] ?? '');
+            if ($value === '' && preg_match('/default\s*:\s*(["\'])(.*?)\1/', $m[3], $d)) {
+                $value = $d[2];
+            }
+            return $html ? htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8') : $value;
+        },
+        $text
+    );
+}
+
 /**
  * Members who can be emailed: current and/or lapsed (never resigned or deceased),
  * optionally only those whose latest subscription expires on or before $expiresBy.

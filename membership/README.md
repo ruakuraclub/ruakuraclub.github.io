@@ -41,6 +41,6 @@ Only members who agreed to the newsletter are put on lists. Withdrawing consent,
 - **One email each** (default): each address gets its own personalised email. Templates can use `{{ params.FIRSTNAME }}`, `{{ params.LASTNAME }}`, `{{ params.FULLNAME }}`, `{{ params.MEMBERSHIP_NUMBER }}` and `{{ params.EXPIRY }}`.
 - **BCC**: one email addressed to the template's sender, with members in BCC (98 per email). Placeholders are blank.
 - Members sharing an email address get one email. CC is never used.
-- Send a test to yourself first. Every send is logged under **Email → Sent emails** and on each member's page.
+- The page previews the email for each ticked member (|< < > >| to flick through), with their details filled in. Send a test to yourself first to see the exact version. Every send is logged under **Email → Sent emails** and on each member's page.
 - These are transactional emails, so they reach members who unsubscribed from the newsletter. Use them only for membership business (renewals, notices), not promotion.
 - The page stops a send that would go over the daily limit in `config.php` (`daily_limit`, 300 on Brevo's free plan). Raise it if you upgrade.
