@@ -1,4 +1,4 @@
 config.php
 samples/
 vendor/
-membership/.claude
+.claude/
